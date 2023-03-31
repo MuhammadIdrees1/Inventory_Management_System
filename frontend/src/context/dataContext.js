@@ -13,9 +13,9 @@ const ContextApi = ({ children }) => {
     try {
       axios
         .post("http://localhost:5050/api/products", newProduct)
-        .then((res) => console.log(res))
+        .then((res) => get_data(res))
         .catch((error) => console.log(error));
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -27,9 +27,9 @@ const ContextApi = ({ children }) => {
     try {
       axios
         .delete(`http://localhost:5050/api/products/${_id}`)
-        .then((res) => console.log(res))
+        .then((res) => get_data(res))
         .catch((error) => console.log(error));
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -41,16 +41,16 @@ const ContextApi = ({ children }) => {
     try {
       axios
         .put(`http://localhost:5050/api/products/${id}`, newProduct)
-        .then((res) => console.log(res))
+        .then((res) => get_data(res))
         .catch((error) => console.log(error));
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
   // get all products
-  useEffect(() => {
+  const get_data = () => {
     try {
       axios
         .get("http://localhost:5050/api/products")
@@ -59,6 +59,26 @@ const ContextApi = ({ children }) => {
     } catch (error) {
       console.log("Error fetching data", error);
     }
+  };
+
+  const AddPurchaseDetails = (id, newPurchaseDetails) => {
+    console.log(id, newPurchaseDetails);
+    try {
+      axios
+        .post(
+          `http://localhost:5050/api/products/${id}/purchase`,
+          newPurchaseDetails
+        )
+        .then((res) => get_data(res))
+        .catch((error) => console.log(error));
+      // window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    get_data();
   }, []);
 
   // <----------------Products Data End--------------------->
@@ -125,6 +145,7 @@ const ContextApi = ({ children }) => {
         products,
         deleteProduct,
         updateProduct,
+        AddPurchaseDetails,
         stores,
         addStore,
         updateStore,

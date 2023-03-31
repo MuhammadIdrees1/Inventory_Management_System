@@ -7,7 +7,6 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const productsRoutes = require("./routes/products");
 const storeRoutes = require("./routes/store");
-// const purchaseRoutes = require("./routes/purchaseDetails");
 
 // database connection
 connection();
@@ -21,7 +20,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/stores", storeRoutes);
-// app.use("/api/product", purchaseRoutes);
 
 const port = process.env.PORT || 4000;
 

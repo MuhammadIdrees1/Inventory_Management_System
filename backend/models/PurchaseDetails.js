@@ -1,14 +1,17 @@
 const mongoose = require("mongoose");
 
-const PurchaseDetails = new mongoose.Schema(
+const PurchaseDetailsSchema = new mongoose.Schema(
   {
     product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
-      required: true,
     },
     date: {
       type: Date,
+      required: true,
+    },
+    price: {
+      type: Number,
       required: true,
     },
     quantity: {
@@ -19,5 +22,8 @@ const PurchaseDetails = new mongoose.Schema(
   { timestamps: true }
 );
 
-const purchaseDetails = mongoose.model("PurchaseDetails", PurchaseDetails);
-module.exports = purchaseDetails;
+const PurchaseDetails = mongoose.model(
+  "PurchaseDetails",
+  PurchaseDetailsSchema
+);
+module.exports = PurchaseDetails;

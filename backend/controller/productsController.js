@@ -1,24 +1,29 @@
 const Products = require("../models/Products");
-// const joi = require("joi");/
+const PurchaseDetails = require("../models/PurchaseDetails");
 
 // Add New Product
 const add_products = async (req, res) => {
   console.log(req.body);
+  const { name, description, manufacturer } = req.body;
+
   try {
-    // const { error } = validate(req.body);
-    // if (error) {
-    //   return res.status(400).send({ message: error.details[0].message });
-    // }
+    if (!name || !description || !manufacturer) {
+      return res.status(400).json({
+        message: "Name, description, and manufacturer are required fields",
+      });
+    }
     const products = new Products({
-      name: req.body.name,
-      description: req.body.description,
-      manufacturer: req.body.manufacturer,
+      name: name,
+      description: description,
+      manufacturer: manufacturer,
+      stock: 0,
+      price: 0,
     });
 
     const product = await products.save();
-    res.send(product);
+    res.status(201).json({ message: "Product added successfully", product });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -35,21 +40,29 @@ const add_products = async (req, res) => {
 const all_products = async (req, res) => {
   try {
     const products = await Products.find();
-    res.send(products);
+    res.status(200).json(products);
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error fetching products");
+    res.status(500).json({ message: "Error fetching products" });
   }
 };
 // Get Single Product
 const single_product = async (req, res) => {
   console.log("pro", req.params.id);
   try {
-    const product = await Products.findById(req.params.id);
-    res.send(product);
+    // get single product with purchase history
+    const populatedProduct = await Products.findById(req.params.id).populate(
+      "purchaseHistory"
+    );
+
+    if (!populatedProduct) {
+      res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json(populatedProduct);
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error fetching products");
+    res.status(500).json({ message: "Error fetching products" });
   }
 };
 
@@ -66,9 +79,13 @@ const update_products = async (req, res) => {
       },
       { new: true }
     );
-    res.json(product);
+
+    if (!product) {
+      res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json({ message: "Product updated successfully", product });
   } catch (error) {
-    res.json({ message: error });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -78,40 +95,47 @@ const delete_products = async (req, res) => {
   try {
     const product = await Products.findByIdAndDelete(req.params.id);
     if (!product) {
-      return res.status(404).send("Product not found");
+      res.status(404).json({ message: "Product not found" });
     }
-    res.send(product);
+    res.status(200).json({ message: "Product deleted successfully", product });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
+// add purchase details
 const add_Purchase_Details = async (req, res) => {
   const { productId } = req.params;
-  const { date, quantity } = req.body;
+  const { date, price, quantity } = req.body;
   try {
     // Find the product by ID
     const product = await Products.findById(productId);
-    console.log(product);
+    if (!product) {
+      res.status(404).json({ message: "Product not found" });
+    }
 
-    const newPurchase = {
+    const newPurchase = new PurchaseDetails({
       product: product._id,
-      date: new Date(date),
-      quantity: parseInt(quantity),
-    };
-    console.log(newPurchase);
+      date: date,
+      price: price,
+      quantity: quantity,
+    });
 
-    // Add the purchase to the product's purchase history
-    product.purchaseHistory.push(newPurchase);
+    const Purchase_Details = await newPurchase.save();
+    console.log(typeof quantity);
+    console.log(typeof product.stock);
 
-    // // Update the product's stock level
-    product.stock += newPurchase.quantity.toString();
-    // console.log(quantity);
-    // Save the updated product to the database
+    product.stock = 0;
+    product.stock += quantity;
+    product.price = 0;
+    product.price += price;
+
+    product.purchaseHistory.push(Purchase_Details._id);
     await product.save();
-
-    // Return the updated product as the response
-    res.status(200).json(product);
+    res.status(201).json({
+      message: "Purchase details added successfully",
+      Purchase_Details,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send("internal server error");

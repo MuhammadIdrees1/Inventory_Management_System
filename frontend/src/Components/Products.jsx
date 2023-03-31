@@ -7,8 +7,8 @@ import UpdateProducts from "./Modals/UpdateProducts";
 
 const Products = () => {
   const { products, deleteProduct } = useData();
-  const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [productId, setProductId] = useState("");
 
   console.log("data", products);
@@ -85,7 +85,8 @@ const Products = () => {
                 {
                   /* console.log("value", value); */
                 }
-                const { _id, name, manufacturer, description } = value;
+                const { _id, name, manufacturer, description, price, stock } =
+                  value;
                 return (
                   <tbody key={_id}>
                     <tr class="bg-white border-b  hover:bg-gray-50 ">
@@ -99,8 +100,8 @@ const Products = () => {
 
                       <td class="px-4 py-4">{manufacturer}</td>
                       <td class="px-4 py-4">{description}</td>
-                      <td class="px-4 py-4">$2999</td>
-                      <td class="px-4 py-4">0</td>
+                      <td class="px-4 py-4">${price}</td>
+                      <td class="px-4 py-4">{stock}</td>
                       <td class="px-4 py-4">
                         <Link
                           class="font-medium text-blue-600  hover:underline "
