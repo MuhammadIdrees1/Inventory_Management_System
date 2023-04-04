@@ -2,25 +2,21 @@ import { useState } from "react";
 import { useData } from "../context/dataContext";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import AddStore from "./Modals/AddStore";
-import UpdateStore from "./Modals/UpdateStore";
+import AddPurchaseDetails from "./Modals/AddPurchaseDetails";
 
-const Stores = () => {
-  const { stores, deleteStore } = useData();
+const PurchaseDetails = () => {
+  const { purchase, delete_purchase } = useData();
   const [showModal, setShowModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [productId, setProductId] = useState("");
 
-  console.log("data", stores);
   return (
     <>
       <div className="  p-4 sm:ml-64">
-        <div className="mt-14   p-4  ">
-          <div class=" relative ml-10 mt-10 overflow-x-auto border-0 bg-white  px-4 sm:rounded-2xl">
+        <div className="mt-14  p-4  ">
+          <div class="relative ml-10 mt-10 overflow-x-auto border-0 bg-white  px-4 sm:rounded-2xl">
             <div class="mt-5 flex items-center justify-between pb-4">
               <div>
                 <h2 className="text-xl font-semibold  text-[#1B254B]">
-                  Stores Table
+                  Purchase Details
                 </h2>
               </div>
               <div>
@@ -37,58 +33,50 @@ const Stores = () => {
             <table class="mt-5 w-full text-left text-sm text-gray-500  ">
               <thead class="border-b bg-white text-xs uppercase text-gray-700  ">
                 <tr>
-                  <th scope="col" class="p-4 text-[#C5CCE1] ">
+                  <th scope="col" class="p-4 text-[#C5CCE1]">
                     id
                   </th>
                   <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
-                    name
+                    Name
                   </th>
                   <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
-                    address
+                    Stock
                   </th>
-
+                  <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
+                    Price
+                  </th>
+                  <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
+                    purchased Date
+                  </th>
                   <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
                     Action
                   </th>
                 </tr>
               </thead>
-              {stores.map((value, index) => {
-                console.log("value", value);
-                const { _id, store, address } = value;
+              {purchase.map((value, index) => {
+                const { _id, productName, date, price, quantity } = value;
                 return (
-                  <tbody>
-                    <tr class="bg-white ">
+                  <tbody key={_id}>
+                    <tr class="bg-white   ">
                       <td class="w-4 p-4">{index + 1}</td>
                       <th
                         scope="row"
                         class="whitespace-nowrap px-4 py-4 font-medium text-gray-900 "
                       >
-                        {store}
+                        {productName}
                       </th>
-                      <td class="px-4 py-4">{address}</td>
+
+                      <td class="px-4 py-4">{quantity}</td>
+                      <td class="px-4 py-4">${price}</td>
+                      <td class="px-4 py-4">{date.slice(0, 10)}</td>
                       <td class="px-4 py-4">
                         <Link
-                          class="font-medium text-blue-600  hover:underline "
                           onClick={() => {
-                            setShowUpdateModal(true);
-                            setProductId(_id);
-                          }}
-                        >
-                          Update
-                        </Link>
-                        <Link
-                          onClick={() => {
-                            deleteStore(_id);
+                            delete_purchase(_id);
                           }}
                           class="pl-3 font-medium  text-red-600 hover:underline"
                         >
                           Delete
-                        </Link>
-                        <Link
-                          class="pl-3 font-medium  text-green-600 hover:underline"
-                          to={`/store/${_id}`}
-                        >
-                          More Info
                         </Link>
                       </td>
                     </tr>
@@ -99,12 +87,9 @@ const Stores = () => {
           </div>
         </div>
       </div>
-      {showModal && <AddStore setShowModal={setShowModal} />}
-      {showUpdateModal && (
-        <UpdateStore setShowUpdateModal={setShowUpdateModal} id={productId} />
-      )}
+      {showModal && <AddPurchaseDetails setShowModal={setShowModal} />}
     </>
   );
 };
 
-export default Stores;
+export default PurchaseDetails;

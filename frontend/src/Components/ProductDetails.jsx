@@ -1,28 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
 import AddPurchaseDetails from "./Modals/AddPurchaseDetails";
+import { useData } from "../context/dataContext";
 
 const ProductDetails = () => {
   const [showModal, setShowModal] = useState(false);
+  const { purchase } = useData();
   const { productId } = useParams();
-  const [productDetail, setProductDetail] = useState({});
   console.log("productId", productId);
 
-  useEffect(() => {
-    try {
-      axios
-        .get(`http://localhost:5050/api/products/${productId}`)
-
-        .then((res) => setProductDetail(res.data))
-        .catch((error) => console.log(error));
-    } catch (error) {
-      console.log("Error fetching data", error);
-    }
-  }, [productId]);
-  console.log(productDetail);
+  console.log(purchase);
   const { name, description, manufacturer, price, stock, purchaseHistory } =
-    productDetail;
+    purchase;
   console.log("purchaseHistory", purchaseHistory);
 
   return (

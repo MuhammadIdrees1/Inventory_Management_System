@@ -1,78 +1,69 @@
-// const { User } = require("../models/User");
-// const bcrypt = require("bcrypt");
-// const joi = require("joi");
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
-// const auth_user = async (req, res) => {
-//   try {
-//     const { error } = validate(req.body);
-//     if (error) {
-//       return res.status(400).send({ message: error.details[0].message });
-//     }
-//     const user = await User.findOne({
-//       email: req.body.email,
-//     });
-//     if (!user) {
-//       return res.status(401).send({ message: "invalid Email or Password" });
-//     }
+const maxAge = 3 * 24 * 60 * 60;
+const createToken = (id) => {
+  return jwt.sign({ id }, "inventory app", {
+    expiresIn: maxAge,
+  });
+};
 
-//     const validPassword = await bcrypt.compare(
-//       req.body.password,
-//       user.password
-//     );
-//     if (!validPassword) {
-//       return res.status(401).send({ message: "Invalid Email or Password" });
-//     }
+const handleErrors = (err) => {
+  let errors = { username: "", email: "", password: "" };
 
-//     const token = user.generateAuthToken();
-//     res.status(200).send({ message: "Logged in successfully" });
-//   } catch (error) {
-//     res.status(500).send({ message: "Internal Server Error" });
-//   }
-// };
+  console.log(err);
+  if (err.message === "Incorrect email") {
+    errors.email = "That email is not registered";
+  }
 
-// const validate = () => {
-//   const schema = joi.object({
-//     email: joi.string().email().required().label("email"),
-//     password: joi.string().required().label("password"),
-//   });
-//   return schema.validate(data);
-// };
+  if (err.message === "Incorrect password") {
+    errors.password = "That password is incorrect";
+  }
 
-const { User } = require("../models/User");
-const bcrypt = require("bcrypt");
-const Joi = require("joi");
+  if (err.code === 11000) {
+    errors.email = "Email is already registered";
+    return errors;
+  }
 
-const auth_user = async (req, res) => {
-  console.log(req.body);
+  if (err.message.includes("Users validation failed")) {
+    Object.values(err.errors).forEach(({ properties }) => {
+      errors[properties.path] = properties.message;
+    });
+  }
+
+  return errors;
+};
+
+module.exports.register = async (req, res, next) => {
   try {
-    const { error } = validate(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
+    const { username, email, password } = req.body;
+    const user = await User.create({ username, email, password });
+    const token = createToken(user._id);
 
-    const user = await User.findOne({ email: req.body.email });
-    if (!user)
-      return res.status(401).send({ message: "Invalid Email or Password" });
+    res.cookie("jwt", token, {
+      withCredentials: true,
+      httpOnly: false,
+      maxAge: maxAge * 1000,
+    });
 
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    if (!validPassword)
-      return res.status(401).send({ message: "Invalid Email or Password" });
-
-    const token = user.generateAuthToken();
-    res.status(200).send({ data: token, message: "logged in successfully" });
-  } catch (error) {
-    res.status(500).send({ message: "Internal Server Error" });
+    res.status(201).json({ user: user._id, created: true });
+  } catch (err) {
+    console.log(err);
+    const errors = handleErrors(err);
+    res.json({ errors, created: false });
   }
 };
 
-const validate = (data) => {
-  const schema = Joi.object({
-    email: Joi.string().email().required().label("Email"),
-    password: Joi.string().required().label("Password"),
-  });
-  return schema.validate(data);
+module.exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  console.log("email", email, " ", password);
+  try {
+    const user = await User.login(email, password);
+    const token = createToken(user._id);
+    res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
+    res.status(200).json({ user: user._id, status: true });
+  } catch (err) {
+    const errors = handleErrors(err);
+    res.json({ errors, status: false });
+  }
 };
-
-module.exports = auth_user;

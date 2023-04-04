@@ -1,72 +1,38 @@
-// const mongoose = require("mongoose");
-// // const jwt = require("jsonwebtoken");
-// // const joi = require("joi");
-// // const passwordComplexity = require("joi-password-complexity");
-
-// const UserSchema = new mongoose.Schema({
-//   username: {
-//     type: String,
-//     required: true,
-//   },
-//   email: {
-//     type: String,
-//     required: true,
-//   },
-//   password: {
-//     type: String,
-//     required: true,
-//   },
-// });
-
-// // UserSchema.methods.generateAuthToken = () => {
-// //   const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY, {
-// //     expiresIn: "7d",
-// //   });
-// //   return token;
-// // };
-
-// // const validate = (data) => {
-// //   const schema = joi.object({
-// //     username: joi.string().required().label("userName"),
-// //     email: joi.string().required().label("email"),
-// //     password: passwordComplexity().required().label("password"),
-// //   });
-// //   return schema.validate(data);
-// // };
-
-// const User = mongoose.model("users", UserSchema);
-
-// module.exports = { User };
-
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const Joi = require("joi");
-const passwordComplexity = require("joi-password-complexity");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true },
+  username: {
+    type: String,
+    required: [true, "Name is Required"],
+  },
+  email: {
+    type: String,
+    required: [true, "Email is Required"],
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: [true, "Password is Required"],
+  },
 });
 
-userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
-    expiresIn: "7d",
-  });
-  return token;
+userSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+userSchema.statics.login = async function (email, password) {
+  const user = await this.findOne({ email });
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      return user;
+    }
+    throw Error("Incorrect password");
+  }
+  throw Error("Incorrect email");
 };
 
-const User = mongoose.model("user", userSchema);
-
-const validate = (data) => {
-  const schema = Joi.object({
-    firstName: Joi.string().required().label("First Name"),
-    lastName: Joi.string().required().label("Last Name"),
-    email: Joi.string().email().required().label("Email"),
-    password: passwordComplexity().required().label("Password"),
-  });
-  return schema.validate(data);
-};
-
-module.exports = { User, validate };
+module.exports = mongoose.model("Users", userSchema);

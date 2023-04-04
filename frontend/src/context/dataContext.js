@@ -6,16 +6,43 @@ const DataContext = createContext();
 const ContextApi = ({ children }) => {
   const [stores, setStores] = useState([]);
   const [products, setProducts] = useState([]);
-  //   <-------------Products data Start-------------->
+  const [purchase, setPurchase] = useState([]);
+  const [sales, setSales] = useState([]);
+
+  //   <-------------Products Start-------------->
+
+  // get all products
+  const get_products = () => {
+    try {
+      axios
+        .get("http://localhost:5050/api/products")
+        .then((res) => setProducts(res.data))
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.log("Error fetching data", error);
+    }
+  };
+
+  // get single products details
+  const product_details = (_id) => {
+    try {
+      axios
+        .get(`http://localhost:5050/api/products/${_id}`)
+        .then((res) => get_products(res.data))
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.log("Error fetching data", error);
+    }
+  };
+
   // add Products
   const addProduct = (newProduct) => {
     console.log("add");
     try {
       axios
         .post("http://localhost:5050/api/products", newProduct)
-        .then((res) => get_data(res))
+        .then((res) => get_products(res))
         .catch((error) => console.log(error));
-      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -27,9 +54,8 @@ const ContextApi = ({ children }) => {
     try {
       axios
         .delete(`http://localhost:5050/api/products/${_id}`)
-        .then((res) => get_data(res))
+        .then((res) => get_products(res))
         .catch((error) => console.log(error));
-      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -41,52 +67,59 @@ const ContextApi = ({ children }) => {
     try {
       axios
         .put(`http://localhost:5050/api/products/${id}`, newProduct)
-        .then((res) => get_data(res))
+        .then((res) => get_products(res))
         .catch((error) => console.log(error));
-      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
-  // get all products
-  const get_data = () => {
+  // <----------------Products End--------------------->
+
+  // <----------------Purchase Details Start----------->
+
+  // add Purchase Details on products
+  const AddPurchaseDetails = (id, newPurchaseDetails) => {
+    console.log(id, newPurchaseDetails);
     try {
       axios
-        .get("http://localhost:5050/api/products")
-        .then((res) => setProducts(res.data))
+        .post(`http://localhost:5050/api/purchase/${id}`, newPurchaseDetails)
+        .then((res) => get_purchase(res))
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get all purchase details
+  const get_purchase = () => {
+    try {
+      axios
+        .get("http://localhost:5050/api/purchase")
+        .then((res) => setPurchase(res.data))
         .catch((error) => console.log(error));
     } catch (error) {
       console.log("Error fetching data", error);
     }
   };
 
-  const AddPurchaseDetails = (id, newPurchaseDetails) => {
-    console.log(id, newPurchaseDetails);
+  const delete_purchase = (_id) => {
     try {
       axios
-        .post(
-          `http://localhost:5050/api/products/${id}/purchase`,
-          newPurchaseDetails
-        )
-        .then((res) => get_data(res))
+        .delete(`http://localhost:5050/api/purchase/${_id}`)
+        .then((res) => get_purchase(res))
         .catch((error) => console.log(error));
-      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    get_data();
-  }, []);
+  // <----------------Purchase Details End----------->
 
-  // <----------------Products Data End--------------------->
-
-  //  <---------------Stores Data Start--------------------->
+  //  <---------------Stores Start--------------------->
 
   // get all stores
-  useEffect(() => {
+  const get_stores = () => {
     try {
       axios
         .get("http://localhost:5050/api/stores")
@@ -95,28 +128,27 @@ const ContextApi = ({ children }) => {
     } catch (error) {
       console.log("Error fetching data", error);
     }
-  }, []);
+  };
 
   // add Store
   const addStore = (newStore) => {
     try {
       axios
         .post("http://localhost:5050/api/stores", newStore)
-        .then((res) => console.log(res))
+        .then((res) => get_stores(res))
         .catch((res) => console.log(res));
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
+  // update store
   const updateStore = (id, newStore) => {
     try {
       axios
         .put(`http://localhost:5050/api/stores/${id}`, newStore)
-        .then((res) => console.log(res))
+        .then((res) => get_stores(res))
         .catch((res) => console.log(res));
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -128,28 +160,47 @@ const ContextApi = ({ children }) => {
     try {
       axios
         .delete(`http://localhost:5050/api/stores/${_id}`)
-        .then((res) => console.log(res.data))
+        .then((res) => get_stores(res.data))
         .catch((error) => console.log(error));
-      window.location.reload();
     } catch (error) {
       console.log("Error fetching data", error);
     }
   };
 
-  // <---------------------Stores Data End---------------------->
+  // <---------------------Stores End---------------------->
+
+  // <---------------------Sales Start--------------------->
+
+  const get_sales = () => {};
+
+  const add_Sales_Details = () => {};
+
+  // <---------------------Sales End---------------------->
+
+  useEffect(() => {
+    get_products();
+    get_purchase();
+    get_stores();
+    get_sales();
+  }, []);
 
   return (
     <DataContext.Provider
       value={{
         addProduct,
-        products,
         deleteProduct,
         updateProduct,
+        products,
+        product_details,
         AddPurchaseDetails,
-        stores,
+        delete_purchase,
+        purchase,
+        add_Sales_Details,
+        sales,
         addStore,
         updateStore,
         deleteStore,
+        stores,
       }}
     >
       {children}

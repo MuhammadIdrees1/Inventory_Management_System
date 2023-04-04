@@ -3,12 +3,18 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useData } from "../../context/dataContext";
 
 const AddPurchaseDetails = (props) => {
-  const { AddPurchaseDetails } = useData();
+  const { AddPurchaseDetails, products } = useData();
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [input, setInput] = useState({
+    product: "",
     quantity: "",
     price: "",
     date: "",
   });
+
+  const handleOptionChange = (e) => {
+    setSelectedProduct(e.target.value);
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -25,19 +31,21 @@ const AddPurchaseDetails = (props) => {
     e.preventDefault();
     console.log("pressed");
     const newPurchaseDetails = {
+      product: input.product,
       quantity: input.quantity,
       price: input.price,
       date: input.date,
     };
     console.log("newSales", newPurchaseDetails);
-    const id = props.id;
+    const id = selectedProduct;
 
     AddPurchaseDetails(id, newPurchaseDetails);
 
-    // setInput({ quantity, price, date });
     props.setShowModal(false);
-    // window.location.reload();
   };
+
+  console.log(selectedProduct);
+
   return (
     <>
       <div
@@ -65,6 +73,30 @@ const AddPurchaseDetails = (props) => {
             {/* Modal body */}
             <form>
               <div class="p-6 space-y-6">
+                <div class="relative z-0 w-full mb-6 group">
+                  <div id="select">
+                    <select
+                      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                      id="countries"
+                      onChange={handleOptionChange}
+                      required={true}
+                      value={selectedProduct}
+                    >
+                      {products.map((value) => {
+                        return (
+                          <option key={value._id} value={value._id}>
+                            {value.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <label
+                      class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                      htmlFor="countries"
+                      value="Select your country"
+                    ></label>
+                  </div>
+                </div>
                 <div class="relative z-0 w-full mb-6 group">
                   <input
                     type="number"

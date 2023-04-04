@@ -2,7 +2,7 @@ import React from "react";
 
 const Topbar = () => {
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 ">
+    <nav className="fixed top-5 left-80 z-50  h-20 w-3/4 rounded-lg bg-gray-100  bg-opacity-20 bg-clip-padding backdrop-blur-lg backdrop-filter ">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-start">
@@ -11,11 +11,11 @@ const Topbar = () => {
               data-drawer-toggle="logo-sidebar"
               aria-controls="logo-sidebar"
               type="button"
-              className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
+              className="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 md:hidden "
             >
               <span className="sr-only">Open sidebar</span>
               <svg
-                className="w-6 h-6"
+                className="h-6 w-6"
                 aria-hidden="true"
                 fill="currentColor"
                 viewBox="0 0 20 20"
@@ -28,36 +28,38 @@ const Topbar = () => {
                 ></path>
               </svg>
             </button>
-            <a href="https://flowbite.com" className="flex ml-2 md:mr-24">
-              <img
-                src={require("../assets/images/inventory-management.png")}
-                className="h-8 mr-3"
-                alt="smart stock Logo"
-              />
-              <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap ">
-                SmartStock
-              </span>
-            </a>
+
+            <div>
+              <p className="font-semiBold  self-center whitespace-nowrap text-sm  ">
+                Pages / Main Dashboard
+              </p>
+              <h1 className="mb-2 text-3xl  font-semibold">Main Dashboard</h1>
+            </div>
           </div>
-          <div className="flex items-center">
-            <div className="flex items-center ml-3">
-              <div>
+          <div className="mb-2 flex items-center">
+            <div className="ml-3 flex items-center ">
+              <div className="flex h-16 w-96 items-center rounded-full bg-white ">
+                <input
+                  type="text"
+                  className="ml-2 h-5/6 w-3/4 rounded-full bg-[#F4F7FE] p-5"
+                  placeholder="Search"
+                />
                 <button
                   type="button"
-                  className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 "
+                  className="ml-6 flex rounded-full  text-sm focus:ring-4 focus:ring-gray-300"
                   aria-expanded="false"
                   data-dropdown-toggle="dropdown-user"
                 >
                   <span className="sr-only">Open user menu</span>
                   <img
-                    className="w-8 h-8 rounded-full"
+                    className="h-14 rounded-full"
                     src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                    alt="user photo"
+                    alt="user"
                   />
                 </button>
               </div>
               <div
-                className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow "
+                className="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded bg-white text-base shadow "
                 id="dropdown-user"
               >
                 <div className="px-4 py-3" role="none">
@@ -65,13 +67,13 @@ const Topbar = () => {
                     Neil Sims
                   </p>
                   <p
-                    className="text-sm font-medium text-gray-900 truncate "
+                    className="truncate text-sm font-medium text-gray-900 "
                     role="none"
                   >
                     neil.sims@flowbite.com
                   </p>
                 </div>
-                <ul className="py-1" role="none">
+                {/* <ul className="py-1" role="none">
                   <li>
                     <a
                       href="#"
@@ -108,7 +110,7 @@ const Topbar = () => {
                       Sign out
                     </a>
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </div>
           </div>

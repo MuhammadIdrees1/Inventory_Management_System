@@ -103,50 +103,10 @@ const delete_products = async (req, res) => {
   }
 };
 
-// add purchase details
-const add_Purchase_Details = async (req, res) => {
-  const { productId } = req.params;
-  const { date, price, quantity } = req.body;
-  try {
-    // Find the product by ID
-    const product = await Products.findById(productId);
-    if (!product) {
-      res.status(404).json({ message: "Product not found" });
-    }
-
-    const newPurchase = new PurchaseDetails({
-      product: product._id,
-      date: date,
-      price: price,
-      quantity: quantity,
-    });
-
-    const Purchase_Details = await newPurchase.save();
-    console.log(typeof quantity);
-    console.log(typeof product.stock);
-
-    product.stock = 0;
-    product.stock += quantity;
-    product.price = 0;
-    product.price += price;
-
-    product.purchaseHistory.push(Purchase_Details._id);
-    await product.save();
-    res.status(201).json({
-      message: "Purchase details added successfully",
-      Purchase_Details,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("internal server error");
-  }
-};
-
 module.exports = {
   add_products,
   all_products,
   single_product,
   update_products,
   delete_products,
-  add_Purchase_Details,
 };

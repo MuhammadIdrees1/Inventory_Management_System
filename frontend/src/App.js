@@ -12,6 +12,7 @@ import Stores from "./Components/Stores";
 import ProductDetails from "./Components/ProductDetails";
 import StoreDetails from "./Components/StoreDetails";
 import NotFound from "./Components/NotFound";
+import PurchaseDetails from "./Components/PurchaseDetails";
 
 // import StoreDetails,  ProductDetails,  Topbar,  Products,  Login,  Signup,  Sidebar,Stores,  Dashboard, from "./Components";
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/login" exact element={<Login />} />
           <Route path="/" exact element={<Dashboard />} />
           <Route path="/products" exact element={<Products />} />
+          <Route path="/purchasedetails" exact element={<PurchaseDetails />} />
           <Route
             path="/product/:productId"
             exact
