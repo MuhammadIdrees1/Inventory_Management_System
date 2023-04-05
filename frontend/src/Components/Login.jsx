@@ -1,33 +1,58 @@
 import { useState } from "react";
 import { HiOutlineMail, HiOutlineLockClosed } from "react-icons/hi";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
+  const [valuesForLogin, setValuesForLogin] = useState({email: "", password: "" });
+  const navigate = useNavigate();
+
   const [error, setError] = useState("");
-  console.log(data);
 
   const handleChange = ({ currentTarget: input }) => {
-    setData({ ...data, [input.name]: input.value });
+    setValuesForLogin({ ...valuesForLogin, [input.name]: input.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const uri = "http://localhost:5050/api/auth";
-      const { data: res } = await axios.post(uri, data);
-      localStorage.setItem("token", res.data);
-      window.location = "/";
-      console.log(res.message);
-    } catch (error) {
-      if (error.response.status >= 400 && error.response.status <= 500) {
-        setError(error.response.data.message);
-      }
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if( !valuesForLogin.email || !valuesForLogin.password){
+     alert ('PLease fill all fields.')
+    }else{
+     try {
+      console.log('setValuesForLogin before' ,valuesForLogin)
+  
+       const {data} = await axios.post("http://localhost:5050/api/auth/login",
+       { ...valuesForLogin},
+       {withCredentials:true}
+       )
+       if (data) {
+         // console.log('good')
+         if (data.errors) {
+           const {email , password} = data.errors;
+          //  if (email) generateError(email);
+          //  else if (password) generateError(password);
+         } else {
+           setValuesForLogin({email: "", password: "" });
+            navigate("/");
+         }
+       }
+       
+     } catch (error) {
+       console.log(error);
+     }
     }
+    // e.preventDefault();
+    // try {
+    //   const uri = "http://localhost:5050/api/auth";
+    //   const { data: res } = await axios.post(uri, data);
+    //   localStorage.setItem("token", res.data);
+    //   window.location = "/";
+    //   console.log(res.message);
+    // } catch (error) {
+    //   if (error.response.status >= 400 && error.response.status <= 500) {
+    //     setError(error.response.data.message);
+    //   }
+    // }
   };
 
   return (
@@ -46,7 +71,7 @@ const Login = () => {
                 <input
                   type="text"
                   name="email"
-                  value={data.email}
+                  value={valuesForLogin.email}
                   onChange={handleChange}
                   placeholder="Email"
                   className="h-10  p-1 w-64 block bg-[#E6EFEE] focus:outline-none"
@@ -60,7 +85,7 @@ const Login = () => {
                   type="text"
                   name="password"
                   onChange={handleChange}
-                  value={data.password}
+                  value={valuesForLogin.password}
                   placeholder="Password"
                   className="h-10  p-1 w-72 block bg-[#E6EFEE] focus:outline-none"
                 />

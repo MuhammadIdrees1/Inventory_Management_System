@@ -2,11 +2,23 @@ import React, { useState } from "react";
 import { FaStore } from "react-icons/fa";
 import { GoSignOut } from "react-icons/go";
 import { MdInventory, MdDashboard } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Topbar from "./Topbar";
+import { useCookies } from 'react-cookie';
+
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
+  const navigate = useNavigate();
+
+
+  const logOut = () => {
+    navigate('/signup');
+    removeCookie('jwt');
+    window.location.reload();
+  };
+
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -129,7 +141,7 @@ const Sidebar = () => {
             <li>
               <Link className="flex items-center rounded-lg p-2 text-[#CAD0E4]">
                 <GoSignOut className="h-6 w-6 text-[#CAD0E4] transition duration-75  " />
-                <span className="ml-3">Log out</span>
+                <span className="ml-3"   onClick={logOut}>Log out</span>
               </Link>
             </li>
           </ul>

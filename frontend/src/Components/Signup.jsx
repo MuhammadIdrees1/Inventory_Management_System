@@ -8,33 +8,67 @@ import {
 import axios from "axios";
 
 const Signup = () => {
-  const [data, setData] = useState({
-    userName: "",
+  const [values, setValues] = useState({
+    username: "",
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
-  console.log(data);
+  // console.log(values);
   const navigate = useNavigate();
 
   // const handleChange = ({ currentTarget: input }) => {
   //   setData({ ...data, [input.name]: input.value });
   // };
+  // const generateError = (error) =>
+  // toast.error(error, {
+  //   position: "bottom-right",
+  // });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("pre");
-    try {
-      const uri = "http://localhost:5050/api/users";
-      const { data: res } = await axios.post(uri, data);
-      navigate("/login");
-      console.log(res.message);
-    } catch (error) {
-      // if (error.response.status >= 400 && error.response.status <= 500) {
-      //   setError(error.response.data.message);
-      console.log(error);
-      // }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if(!values.username || !values.email || !values.password){
+     alert ('PLease fill all fields.')
+    }else{
+     try {
+      console.log('user ' , values)
+       const {data} = await axios.post("http://localhost:5050/api/auth/register",
+       { ...values},
+       {withCredentials:true}
+       )
+       if (data) {
+         // console.log('good')
+         if (data.errors) {
+           const {username, email, password } = data.errors;
+          //  if (email) generateError(email);
+          //  else if (password) generateError(password);
+         } else {
+           setValues({ username: "", email: "", password: "" });
+            navigate("/");
+         }
+       }
+       
+     } catch (error) {
+       console.log(error);
+     }
     }
+
+
+    // e.preventDefault();
+    // console.log("pre");
+    // try {
+    //   const uri = "http://localhost:5050/api/users";
+    //   const { data: res } = await axios.post(uri, data);
+    //   navigate("/login");
+    //   console.log(res.message);
+    // } catch (error) {
+    //   // if (error.response.status >= 400 && error.response.status <= 500) {
+    //   //   setError(error.response.data.message);
+    //   console.log(error);
+    //   // }
+    // }
+
   };
 
   return (
@@ -71,10 +105,10 @@ const Signup = () => {
                   required
                   placeholder="Name"
                   className="h-10 w-64 p-1  block bg-[#E6EFEE] focus:outline-none"
-                  value={data.userName}
+                  value={values.username}
                   // onChange={handleChange}
                   onChange={(event) =>
-                    setData({ ...data, userName: event.target.value })
+                    setValues({ ...values, username: event.target.value })
                   }
                 />
               </div>
@@ -87,9 +121,9 @@ const Signup = () => {
                   name="email"
                   required
                   placeholder="Email"
-                  value={data.email}
+                  value={values.email}
                   onChange={(event) =>
-                    setData({ ...data, email: event.target.value })
+                    setValues({ ...values, email: event.target.value })
                   }
                   className="h-10  p-1 w-64 block bg-[#E6EFEE] focus:outline-none"
                 />
@@ -103,9 +137,9 @@ const Signup = () => {
                   required
                   name="password"
                   placeholder="Password"
-                  value={data.password}
+                  value={values.password}
                   onChange={(event) =>
-                    setData({ ...data, password: event.target.value })
+                    setValues({ ...values, password: event.target.value })
                   }
                   className="h-10  p-1 w-72 block bg-[#E6EFEE] focus:outline-none"
                 />
