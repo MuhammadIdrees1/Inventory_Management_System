@@ -6,7 +6,6 @@ const Store = require("../models/Store");
 const add_Sales_Details = async (req, res) => {
   const { productId, storeId, userId } = req.params;
   const { date, price, quantity } = req.body;
-  console.log(productId, storeId, userId, date, price, quantity);
   try {
     // Find the product by ID
     const product = await Products.findById(productId);
@@ -14,9 +13,7 @@ const add_Sales_Details = async (req, res) => {
       res.status(404).json({ message: "Product not found" });
     }
 
-    console.log("product", product);
-
-    // Find the product by ID
+    // Find the store by ID
     const stores = await Store.findById(storeId);
     if (!stores) {
       res.status(404).json({ message: "Store not found" });
@@ -33,18 +30,10 @@ const add_Sales_Details = async (req, res) => {
       quantity: quantity,
     });
 
-    console.log(newSale);
-
     const Sales_Details = await newSale.save();
-    // console.log(Sales_Details);
-    console.log(typeof quantity);
-    console.log(typeof product.stock);
 
-    // product.stock = 0;
     product.stock -= quantity;
-    // product.price = 0;
 
-    // product.purchaseHistory.push(Purchase_Details._id);
     await product.save();
     res.status(201).json({
       message: "Purchase details added successfully",

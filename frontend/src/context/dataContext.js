@@ -84,7 +84,10 @@ const ContextApi = ({ children }) => {
     console.log(id, newPurchaseDetails);
     try {
       axios
-        .post(`http://localhost:5050/api/purchase/${id}`, newPurchaseDetails)
+        .post(
+          `http://localhost:5050/api/purchase/${id}/${userId}`,
+          newPurchaseDetails
+        )
         .then((res) => get_purchase(res))
         .catch((error) => console.log(error));
     } catch (error) {
@@ -107,7 +110,7 @@ const ContextApi = ({ children }) => {
   const delete_purchase = (_id) => {
     try {
       axios
-        .delete(`http://localhost:5050/api/purchase/${_id}/${userId}`)
+        .delete(`http://localhost:5050/api/purchase/${_id}`)
         .then((res) => get_purchase(res))
         .catch((error) => console.log(error));
     } catch (error) {
