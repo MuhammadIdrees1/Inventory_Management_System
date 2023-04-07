@@ -3,17 +3,25 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useData } from "../../context/dataContext";
 
 const AddSalesDetails = (props) => {
-  const { AddPurchaseDetails, products } = useData();
+  const { add_Sales_Details, products, stores } = useData();
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedStore, setSelectedStore] = useState(null);
   const [input, setInput] = useState({
     product: "",
+    store: "",
     quantity: "",
     price: "",
     date: "",
   });
 
+  console.log("store", stores);
+
   const handleOptionChange = (e) => {
     setSelectedProduct(e.target.value);
+  };
+
+  const handleStoreOptionChange = (e) => {
+    setSelectedStore(e.target.value);
   };
 
   const handleChange = (event) => {
@@ -30,16 +38,16 @@ const AddSalesDetails = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("pressed");
-    const newPurchaseDetails = {
-      product: input.product,
+    const newSalesDetails = {
       quantity: input.quantity,
       price: input.price,
       date: input.date,
     };
-    console.log("newSales", newPurchaseDetails);
-    const id = selectedProduct;
+    console.log("newSales", newSalesDetails);
+    const productId = selectedProduct;
+    const storeId = selectedStore;
 
-    AddPurchaseDetails(id, newPurchaseDetails);
+    add_Sales_Details(storeId, productId, newSalesDetails);
 
     props.setShowModal(false);
   };
@@ -59,7 +67,7 @@ const AddSalesDetails = (props) => {
             {/* Modal header  */}
             <div class="flex items-center justify-center rounded-t border-b p-5 ">
               <h3 class="text-xl  font-medium text-gray-900 ">
-                Add Purchase Details
+                Add Sales Details
               </h3>
               <button
                 onClick={() => props.setShowModal(false)}
@@ -86,6 +94,31 @@ const AddSalesDetails = (props) => {
                         return (
                           <option key={value._id} value={value._id}>
                             {value.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <label
+                      class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500"
+                      htmlFor="countries"
+                      value="Select your country"
+                    ></label>
+                  </div>
+                </div>
+                <div class="group relative z-0 mb-6 w-full">
+                  <div id="select">
+                    <select
+                      class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
+                      id="countries"
+                      onChange={handleStoreOptionChange}
+                      placeholder="select store"
+                      required={true}
+                      value={selectedStore}
+                    >
+                      {stores.map((value) => {
+                        return (
+                          <option key={value._id} value={value._id}>
+                            {value.store}
                           </option>
                         );
                       })}

@@ -8,8 +8,8 @@ const {
   // add_Purchase_Details,
 } = require("../controller/productsController");
 
-router.post("/", add_products);
-router.get("/", all_products);
+router.post("/:userId", add_products);
+router.get("/:userId", all_products);
 router.get("/:id", single_product);
 router.put("/:id", update_products);
 router.delete("/:id", delete_products);

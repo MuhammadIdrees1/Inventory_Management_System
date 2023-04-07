@@ -8,6 +8,7 @@ const ContextApi = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [purchase, setPurchase] = useState([]);
   const [sales, setSales] = useState([]);
+  const [userId, setUserId] = useState("");
 
   //   <-------------Products Start-------------->
 
@@ -15,7 +16,7 @@ const ContextApi = ({ children }) => {
   const get_products = () => {
     try {
       axios
-        .get("http://localhost:5050/api/products")
+        .get(`http://localhost:5050/api/products/${userId}`)
         .then((res) => setProducts(res.data))
         .catch((error) => console.log(error));
     } catch (error) {
@@ -40,7 +41,7 @@ const ContextApi = ({ children }) => {
     console.log("add");
     try {
       axios
-        .post("http://localhost:5050/api/products", newProduct)
+        .post(`http://localhost:5050/api/products/${userId}`, newProduct)
         .then((res) => get_products(res))
         .catch((error) => console.log(error));
     } catch (error) {
@@ -95,7 +96,7 @@ const ContextApi = ({ children }) => {
   const get_purchase = () => {
     try {
       axios
-        .get("http://localhost:5050/api/purchase")
+        .get(`http://localhost:5050/api/purchase/${userId}`)
         .then((res) => setPurchase(res.data))
         .catch((error) => console.log(error));
     } catch (error) {
@@ -106,7 +107,7 @@ const ContextApi = ({ children }) => {
   const delete_purchase = (_id) => {
     try {
       axios
-        .delete(`http://localhost:5050/api/purchase/${_id}`)
+        .delete(`http://localhost:5050/api/purchase/${_id}/${userId}`)
         .then((res) => get_purchase(res))
         .catch((error) => console.log(error));
     } catch (error) {
@@ -122,7 +123,7 @@ const ContextApi = ({ children }) => {
   const get_stores = () => {
     try {
       axios
-        .get("http://localhost:5050/api/stores")
+        .get(`http://localhost:5050/api/stores/${userId}`)
         .then((res) => setStores(res.data))
         .catch((error) => console.log(error));
     } catch (error) {
@@ -132,9 +133,10 @@ const ContextApi = ({ children }) => {
 
   // add Store
   const addStore = (newStore) => {
+    console.log("from add store", userId);
     try {
       axios
-        .post("http://localhost:5050/api/stores", newStore)
+        .post(`http://localhost:5050/api/stores/${userId}`, newStore)
         .then((res) => get_stores(res))
         .catch((res) => console.log(res));
     } catch (error) {
@@ -171,18 +173,65 @@ const ContextApi = ({ children }) => {
 
   // <---------------------Sales Start--------------------->
 
-  const get_sales = () => {};
+  const get_sales = () => {
+    try {
+      axios
+        .get(`http://localhost:5050/api/sales/${userId}`)
+        .then((res) => setSales(res.data))
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const add_Sales_Details = () => {};
+  const add_Sales_Details = (storeId, productId, newSalesDetails) => {
+    console.log("add_sales", storeId, productId, newSalesDetails);
+
+    try {
+      axios
+        .post(
+          `http://localhost:5050/api/sales/${userId}/${storeId}/${productId}`,
+          newSalesDetails
+        )
+        .then((res) => get_products(res))
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // <---------------------Sales End---------------------->
+
+  // varify Current User
+  const varifyUser = () => {
+    axios
+      .post("http://localhost:5050/api/auth", {}, { withCredentials: true })
+      .then((response) => {
+        const data = response.data;
+        if (!data.status) {
+          // toast(`User id Not Found`, { theme: 'dark' })
+          console.log("user not found");
+        } else {
+          setUserId(data.uId);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  console.log("userId", userId);
+
+  useEffect(() => {
+    varifyUser();
+  }, []);
 
   useEffect(() => {
     get_products();
     get_purchase();
     get_stores();
     get_sales();
-  }, []);
+  }, [userId]);
 
   return (
     <DataContext.Provider

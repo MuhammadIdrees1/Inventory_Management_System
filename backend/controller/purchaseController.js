@@ -3,7 +3,7 @@ const PurchaseDetails = require("../models/PurchaseDetails");
 
 // add purchase details
 const add_Purchase_Details = async (req, res) => {
-  const { productId } = req.params;
+  const { productId, userId } = req.params;
   const { date, price, quantity } = req.body;
   try {
     // Find the product by ID
@@ -13,6 +13,7 @@ const add_Purchase_Details = async (req, res) => {
     }
 
     const newPurchase = new PurchaseDetails({
+      userId: userId,
       productId: product._id,
       productName: product.name,
       date: date,
@@ -43,8 +44,9 @@ const add_Purchase_Details = async (req, res) => {
 
 // Get All purchase details
 const all_purchase_details = async (req, res) => {
+  const { userId } = req.params;
   try {
-    const purchase_details = await PurchaseDetails.find();
+    const purchase_details = await PurchaseDetails.find({ userId });
     res.status(200).json(purchase_details);
   } catch (error) {
     console.log(error);

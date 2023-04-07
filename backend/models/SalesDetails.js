@@ -6,6 +6,20 @@ const SalesDetailsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
     },
+    userId: { type: String, required: true },
+
+    productName: {
+      type: String,
+      required: true,
+    },
+    store: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "stores",
+    },
+    storeName: {
+      type: String,
+      required: true,
+    },
     date: {
       type: Date,
       required: true,

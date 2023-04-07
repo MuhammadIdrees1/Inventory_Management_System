@@ -6,6 +6,7 @@ const PurchaseDetailsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
     },
+    userId: { type: String, required: true },
     productName: {
       type: String,
       required: true,

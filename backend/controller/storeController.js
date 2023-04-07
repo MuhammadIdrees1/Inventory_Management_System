@@ -2,8 +2,11 @@ const Store = require("../models/Store");
 
 // add Store
 const add_Store = async (req, res) => {
+  const { userId } = req.params;
+  console.log(userId);
   try {
     const stores = new Store({
+      userId: userId,
       store: req.body.store,
       address: req.body.store,
     });
@@ -16,8 +19,9 @@ const add_Store = async (req, res) => {
 
 // get store
 const get_Store = async (req, res) => {
+  const { userId } = req.params;
   try {
-    const allStores = await Store.find();
+    const allStores = await Store.find({ userId });
     res.send(allStores);
   } catch (error) {
     console.log(error);

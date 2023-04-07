@@ -4,8 +4,8 @@ const {
   all_purchase_details,
   delete_purchase,
 } = require("../controller/purchaseController");
-router.post("/:productId", add_Purchase_Details);
-router.get("/", all_purchase_details);
+router.post("/:productId/:userId", add_Purchase_Details);
+router.get("/:userId", all_purchase_details);
 router.delete("/:id", delete_purchase);
 
 module.exports = router;

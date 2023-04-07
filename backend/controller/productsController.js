@@ -3,6 +3,7 @@ const PurchaseDetails = require("../models/PurchaseDetails");
 
 // Add New Product
 const add_products = async (req, res) => {
+  const { userId } = req.params;
   console.log(req.body);
   const { name, description, manufacturer } = req.body;
 
@@ -13,6 +14,7 @@ const add_products = async (req, res) => {
       });
     }
     const products = new Products({
+      userId: userId,
       name: name,
       description: description,
       manufacturer: manufacturer,
@@ -27,19 +29,11 @@ const add_products = async (req, res) => {
   }
 };
 
-// const validate = () => {
-//   const schema = joi.object({
-//     title: joi.string().email().required().label("title"),
-//     manufacturer: joi.string().required().label("manufacturer"),
-//     description: joi.string().required().label("description"),
-//   });
-//   return schema.validate(data);
-// };
-
 // Get All Products
 const all_products = async (req, res) => {
+  const { userId } = req.params;
   try {
-    const products = await Products.find();
+    const products = await Products.find({ userId });
     res.status(200).json(products);
   } catch (error) {
     console.log(error);

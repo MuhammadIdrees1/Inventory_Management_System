@@ -9,6 +9,7 @@ const StoreSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userId: { type: String, required: true },
 });
 
 const Store = mongoose.model("stores", StoreSchema);
