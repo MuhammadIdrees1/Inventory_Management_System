@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useData } from "../../context/dataContext";
+import { useData } from "../../hooks/useData";
+import { addProduct } from "../../api/Products";
 
 const AddProducts = (props) => {
-  const { addProduct } = useData();
+  const { userId } = useData();
+  console.log("addProduct", userId);
   const [input, setInput] = useState({
     name: "",
     description: "",
@@ -30,7 +32,8 @@ const AddProducts = (props) => {
       manufacturer: input.manufacturer,
     };
 
-    addProduct(newProduct);
+    console.log(userId, newProduct);
+    addProduct(userId, newProduct);
 
     setInput({ name: "", description: "", manufacturer: "" });
     props.setShowModal(false);

@@ -1,23 +1,30 @@
 import { useState } from "react";
-import { useData } from "../context/dataContext";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { useData } from "../hooks/useData";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import AddProducts from "./Modals/AddProducts";
-import UpdateProducts from "./Modals/UpdateProducts";
+import AddProducts from "../Components/Modals/AddProducts";
+import UpdateProducts from "../Components/Modals/UpdateProducts";
+import { deleteProduct } from "../api/Products";
 
 const Products = () => {
-  const { products, deleteProduct, purchase_details } = useData();
+  const { filteredProducts, userId } = useData();
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [productId, setProductId] = useState("");
+  console.log(userId, "userIds");
+  // const column = [
+  //   { heading: "Name", value: "name" },
+  //   { heading: "Description", value: "manufacturer" },
+  //   { heading: "Manufacturer", value: "description" },
+  //   { heading: "Price", value: "price" },
+  //   { heading: "Stock", value: "stock" },
+  // ];
 
-  console.log("data", products);
   return (
     <>
       <div className="  p-4 sm:ml-64">
-        <div className="mt-14   p-4  ">
-          <div class="relative mt-10 ml-10 overflow-x-auto border-0 bg-white  px-4 sm:rounded-2xl">
+        <div className="mt-14 ml-7   p-4  ">
+          <div class="relative mt-10 w-full overflow-x-auto border-0 bg-white  px-4 sm:rounded-2xl">
             <div class="mt-5 flex items-center justify-between pb-4">
               <div>
                 <h2 className="text-xl font-semibold  text-[#1B254B]">
@@ -61,12 +68,12 @@ const Products = () => {
                   </th>
                 </tr>
               </thead>
-              {products.map((value, index) => {
+              {filteredProducts.map((value, index) => {
                 const { _id, name, manufacturer, description, price, stock } =
                   value;
                 return (
                   <tbody key={_id}>
-                    <tr class="bg-white   ">
+                    <tr class="bg-white">
                       <td class="w-4 p-4">{index + 1}</td>
                       <th
                         scope="row"
@@ -98,19 +105,13 @@ const Products = () => {
                         >
                           Delete
                         </Link>
-                        <Link
-                          class="pl-3 font-medium  text-green-600 hover:underline"
-                          to={`/product/${_id}`}
-                          onClick={() => purchase_details(_id)}
-                        >
-                          View Details
-                        </Link>
                       </td>
                     </tr>
                   </tbody>
                 );
               })}
             </table>
+            {/* <Table column={column} data={products} /> */}
           </div>
         </div>
       </div>

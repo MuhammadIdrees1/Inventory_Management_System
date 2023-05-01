@@ -9,6 +9,12 @@ const StoreSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  // totalSales: {
+  //   type: String,
+  // },
+  // totalPurchase: {
+  //   type: String,
+  // },
   userId: { type: String, required: true },
 });
 

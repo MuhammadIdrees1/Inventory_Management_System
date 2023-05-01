@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useData } from "../../context/dataContext";
+import { useData } from "../../hooks/useData";
+import { add_Sales_Details } from "../../api/Sales";
 
 const AddSalesDetails = (props) => {
-  const { add_Sales_Details, products, stores } = useData();
+  const { products, stores, userId } = useData();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedStore, setSelectedStore] = useState(null);
   const [input, setInput] = useState({
@@ -47,7 +48,7 @@ const AddSalesDetails = (props) => {
     const productId = selectedProduct;
     const storeId = selectedStore;
 
-    add_Sales_Details(storeId, productId, newSalesDetails);
+    add_Sales_Details(userId, storeId, productId, newSalesDetails);
 
     props.setShowModal(false);
   };

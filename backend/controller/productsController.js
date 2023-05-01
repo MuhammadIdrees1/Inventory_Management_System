@@ -1,5 +1,6 @@
 const Products = require("../models/Products");
 const PurchaseDetails = require("../models/PurchaseDetails");
+const SalesDetails = require("../models/SalesDetails");
 
 // Add New Product
 const add_products = async (req, res) => {
@@ -42,10 +43,11 @@ const all_products = async (req, res) => {
 };
 // Get Single Product
 const single_product = async (req, res) => {
-  console.log("pro", req.params.id);
+  const { productId } = req.params;
+  console.log("pro", productId);
   try {
     // get single product with purchase history
-    const populatedProduct = await Products.findById(req.params.id).populate(
+    const populatedProduct = await Products.findById({ productId }).populate(
       "purchaseHistory"
     );
 
@@ -54,6 +56,8 @@ const single_product = async (req, res) => {
     }
 
     res.status(200).json(populatedProduct);
+
+    console.log(populatedProduct);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error fetching products" });
@@ -91,6 +95,21 @@ const delete_products = async (req, res) => {
     if (!product) {
       res.status(404).json({ message: "Product not found" });
     }
+
+    const purchase = await PurchaseDetails.deleteOne({
+      productId: req.params.id,
+    });
+    if (!purchase) {
+      res.status(404).json({ message: "Product not found" });
+    }
+
+    const sales = await SalesDetails.deleteOne({
+      productId: req.params.id,
+    });
+    if (!sales) {
+      res.status(404).json({ message: "Product not found" });
+    }
+
     res.status(200).json({ message: "Product deleted successfully", product });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });

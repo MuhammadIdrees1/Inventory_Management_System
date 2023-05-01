@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useData } from "../../context/dataContext";
+import { updateProduct } from "../../api/Products";
 
 const UpdateProducts = (props) => {
   console.log(props.id);
-  const { updateProduct } = useData();
   const [input, setInput] = useState({
     name: "",
     description: "",

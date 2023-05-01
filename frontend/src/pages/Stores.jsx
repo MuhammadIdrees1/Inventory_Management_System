@@ -1,17 +1,23 @@
 import { useState } from "react";
-import { useData } from "../context/dataContext";
+import { useData } from "../hooks/useData";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import AddStore from "./Modals/AddStore";
-import UpdateStore from "./Modals/UpdateStore";
+import AddStore from "../Components/Modals/AddStore";
+import UpdateStore from "../Components/Modals/UpdateStore";
+import Table from "../common/Table";
+import { delete_Store } from "../api/Stores";
 
 const Stores = () => {
-  const { stores, deleteStore } = useData();
+  const { filteredStores } = useData();
   const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [productId, setProductId] = useState("");
 
-  console.log("data", stores);
+  // const column = [
+  //   { heading: "Name", value: "store" },
+  //   { heading: "Address", value: "address" },
+  // ];
+
   return (
     <>
       <div className="  p-4 sm:ml-64">
@@ -29,7 +35,7 @@ const Stores = () => {
                   class=" b inline-flex items-center rounded-lg bg-[#EDF2F7]  px-3 py-3 text-gray-500  hover:bg-gray-100 focus:outline-none"
                   type="button"
                 >
-                  <HiOutlinePlus class="h-5 w-5   text-[#422AFB] " />
+                  <HiOutlinePlus class="h-5 w-5 text-[#422AFB] " />
                   {/* Add Products */}
                 </button>
               </div>
@@ -52,8 +58,7 @@ const Stores = () => {
                   </th>
                 </tr>
               </thead>
-              {stores.map((value, index) => {
-                console.log("value", value);
+              {filteredStores.map((value, index) => {
                 const { _id, store, address } = value;
                 return (
                   <tbody>
@@ -78,17 +83,11 @@ const Stores = () => {
                         </Link>
                         <Link
                           onClick={() => {
-                            deleteStore(_id);
+                            delete_Store(_id);
                           }}
                           class="pl-3 font-medium  text-red-600 hover:underline"
                         >
                           Delete
-                        </Link>
-                        <Link
-                          class="pl-3 font-medium  text-green-600 hover:underline"
-                          to={`/store/${_id}`}
-                        >
-                          More Info
                         </Link>
                       </td>
                     </tr>
@@ -96,6 +95,7 @@ const Stores = () => {
                 );
               })}
             </table>
+            {/* <Table column={column} data={stores} /> */}
           </div>
         </div>
       </div>

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useData } from "../../context/dataContext";
+import { useData } from "../../hooks/useData";
+import { add_Store } from "../../api/Stores";
 
 const AddStore = (props) => {
-  const { addStore } = useData();
+  const { userId } = useData();
   const [input, setInput] = useState({
     store: "",
     address: "",
@@ -28,7 +29,7 @@ const AddStore = (props) => {
       address: input.address,
     };
 
-    addStore(newStore);
+    add_Store(userId, newStore);
 
     setInput({ store: "", address: "" });
     props.setShowModal(false);

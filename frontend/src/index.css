@@ -16,8 +16,18 @@
 }
 body {
   background-color: #f4f7fe;
+  font-family: sans-serif;
 }
 
-::-webkit-scrollbar {
+body::-webkit-scrollbar {
   display: none;
+}
+
+.active {
+  color: black;
+  border-right: 4px solid #422afb;
+}
+
+.active > .icon {
+  color: #422afb;
 }

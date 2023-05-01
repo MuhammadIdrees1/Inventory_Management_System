@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useData } from "../context/dataContext";
+import { useData } from "../hooks/useData";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import AddPurchaseDetails from "./Modals/AddPurchaseDetails";
+import { delete_purchase } from "../api/Purchase";
 
 const PurchaseDetails = () => {
-  const { purchase, delete_purchase } = useData();
+  const { filteredPurchases } = useData();
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -37,7 +38,7 @@ const PurchaseDetails = () => {
                     id
                   </th>
                   <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
-                    Name
+                    Product Name
                   </th>
                   <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
                     Stock
@@ -53,7 +54,7 @@ const PurchaseDetails = () => {
                   </th>
                 </tr>
               </thead>
-              {purchase.map((value, index) => {
+              {filteredPurchases.map((value, index) => {
                 const { _id, productName, date, price, quantity } = value;
                 return (
                   <tbody key={_id}>

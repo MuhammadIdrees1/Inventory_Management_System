@@ -1,12 +1,26 @@
-import React from "react";
+// import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import Searchbar from "../common/Searchbar";
 
 const Topbar = () => {
+  // const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  const currentLocation = {
+    "/": "Main Dashboard",
+    "/products": "Products",
+    "/stores": "Stores",
+    "/purchaseDetails": "Purchase Details",
+    "/salesDetails": "Sales Details",
+  };
+
   return (
-    <nav className="fixed top-5 left-80 z-50  h-20 w-3/4 rounded-lg bg-gray-100  bg-opacity-20 bg-clip-padding backdrop-blur-lg backdrop-filter ">
-      <div className="px-3 py-3 lg:px-5 lg:pl-3">
+    <nav className="fixed top-5 left-72 z-40 ml-6  h-24 w-3/4 rounded-xl   bg-opacity-50 bg-clip-padding backdrop-blur-lg backdrop-filter ">
+      <div className="px-3 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-start">
             <button
+              // onClick={() => setIsOpen(true)}
               data-drawer-target="logo-sidebar"
               data-drawer-toggle="logo-sidebar"
               aria-controls="logo-sidebar"
@@ -30,90 +44,61 @@ const Topbar = () => {
             </button>
 
             <div>
-              <p className="font-semiBold  self-center whitespace-nowrap text-sm  ">
-                Pages / Main Dashboard
+              <p className="font-semiBold self-center whitespace-nowrap  text-sm capitalize tracking-wider  ">
+                Pages / {currentLocation[location.pathname]}
               </p>
-              <h1 className="mb-2 text-3xl  font-semibold">Main Dashboard</h1>
+              <h1 className="mb-2 text-4xl  font-bold  capitalize">
+                {currentLocation[location.pathname]}
+              </h1>
             </div>
-          </div>
-          <div className="mb-2 flex items-center">
-            <div className="ml-3 flex items-center ">
-              <div className="flex h-16 w-96 items-center rounded-full bg-white ">
-                <input
+          </div>{" "}
+          {location.pathname === "/" ? null : (
+            <div className="mb-2 flex items-center ">
+              <div className="ml-3 flex items-center ">
+                <div className="flex h-16 w-96 items-center rounded-full bg-white shadow-md">
+                  {/* <input
                   type="text"
                   className="ml-2 h-5/6 w-3/4 rounded-full bg-[#F4F7FE] p-5"
                   placeholder="Search"
-                />
-                <button
-                  type="button"
-                  className="ml-6 flex rounded-full  text-sm focus:ring-4 focus:ring-gray-300"
-                  aria-expanded="false"
-                  data-dropdown-toggle="dropdown-user"
-                >
-                  <span className="sr-only">Open user menu</span>
-                  <img
-                    className="h-14 rounded-full"
-                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                    alt="user"
-                  />
-                </button>
-              </div>
-              <div
-                className="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded bg-white text-base shadow "
-                id="dropdown-user"
-              >
-                <div className="px-4 py-3" role="none">
-                  <p className="text-sm text-gray-900 " role="none">
-                    Neil Sims
-                  </p>
-                  <p
-                    className="truncate text-sm font-medium text-gray-900 "
-                    role="none"
+                /> */}
+
+                  <Searchbar />
+                  <button
+                    type="button"
+                    // onClick={() => setIsOpen(true)}
+                    className="ml-6 flex rounded-full  text-sm focus:ring-4 focus:ring-gray-300"
+                    aria-expanded="false"
+                    data-dropdown-toggle="dropdown-user"
                   >
-                    neil.sims@flowbite.com
-                  </p>
+                    <span className="sr-only">Open user menu</span>
+                    <img
+                      className="h-14 rounded-full"
+                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                      alt="user"
+                    />
+                  </button>
                 </div>
-                {/* <ul className="py-1" role="none">
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                      role="menuitem"
+                {/* {isOpen && (
+                <div
+                  className="z-50 my-4  list-none divide-y divide-gray-100 rounded bg-white text-base shadow "
+                  id="dropdown-user"
+                >
+                  <div className="px-4 py-3" role="none">
+                    <p className="text-sm text-gray-900 " role="none">
+                      Neil Sims
+                    </p>
+                    <p
+                      className="truncate text-sm font-medium text-gray-900 "
+                      role="none"
                     >
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                      role="menuitem"
-                    >
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                      role="menuitem"
-                    >
-                      Earnings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                      role="menuitem"
-                    >
-                      Sign out
-                    </a>
-                  </li>
-                </ul> */}
+                      neil.sims@flowbite.com
+                    </p>
+                  </div>
+                </div>
+              )} */}
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </nav>

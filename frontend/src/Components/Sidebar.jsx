@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { FaStore } from "react-icons/fa";
 import { GoSignOut } from "react-icons/go";
 import { MdInventory, MdDashboard } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
-import Topbar from "./Topbar";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 const Sidebar = () => {
@@ -65,13 +64,13 @@ const Sidebar = () => {
         </div>
         <ul classNameName="py-6">
           <li classNameName="px-6 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-            <a href="#">Link j1</a>
+            <a href="#">NavLink j1</a>
           </li>
           <li classNameName="px-6 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-            <a href="#">Link 2</a>
+            <a href="#">NavLink 2</a>
           </li>
           <li classNameName="px-6 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-            <a href="#">Link 3</a>
+            <a href="#">NavLink 3</a>
           </li>
         </ul>
       </nav> */}
@@ -88,72 +87,72 @@ const Sidebar = () => {
             Smart Stock
           </h1>
         </div>
-        <div className="h-full overflow-y-auto  border-t-2 bg-white px-10 pb-4 pt-7 ">
+        <div className="h-full overflow-y-auto  border-t-2 bg-white pl-10 pb-4 pt-7 ">
           <ul className="space-y-2 font-medium">
             <li>
-              <Link
+              <NavLink
                 to="/"
-                className="flex items-center rounded-lg p-2 text-[#CAD0E4]  "
+                className="flex h-8 items-center p-2  font-bold text-[#A3Aed0]  "
               >
-                <MdDashboard className="h-6 w-6 text-[#CAD0E4] transition duration-75   " />
+                <MdDashboard className="icon h-6 w-6 text-[#A3Aed0] transition  duration-75" />
                 <span className="ml-3">Dashboard</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/products"
-                className="flex items-center rounded-lg p-2 text-[#CAD0E4]   "
+                className="flex h-8 items-center p-2  font-bold text-[#A3Aed0]   "
               >
                 <MdInventory
-                  className="h-6 w-6 text-[#CAD0E4] transition duration-75
+                  className="icon h-6 w-6 text-[#A3Aed0] transition duration-75
                 "
                 />
                 <span className="ml-3">Inventory</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/stores"
-                className="flex items-center rounded-lg p-2 text-[#CAD0E4]   "
+                className="flex  h-8 items-center p-2  font-bold text-[#A3Aed0]   "
               >
                 <FaStore
-                  className="h-6 w-6 text-[#CAD0E4] transition duration-75
+                  className="icon h-6 w-6 text-[#A3Aed0] transition duration-75
                  "
                 />
                 <span className="ml-3">Manage Stores</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
-                to="/purchasedetails"
-                className="flex items-center rounded-lg p-2 text-[#CAD0E4]   "
+              <NavLink
+                to="/purchaseDetails"
+                className="flex h-8 items-center p-2  font-bold text-[#A3Aed0]   "
               >
                 <FaStore
-                  className="h-6 w-6 text-[#CAD0E4] transition duration-75
+                  className="icon h-6 w-6 text-[#A3Aed0] transition duration-75
                  "
                 />
                 <span className="ml-3">Add Purchase Details</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/salesDetails"
-                className="flex items-center rounded-lg p-2 text-[#CAD0E4]   "
+                className="flex h-8 items-center p-2  font-semibold text-[#A3Aed0]   "
               >
-                <FaStore
-                  className="h-6 w-6 text-[#CAD0E4] transition duration-75
-                 "
-                />
+                <FaStore className=" icon h-6 w-6 text-[#A3Aed0] transition duration-75 " />
                 <span className="ml-3">Add Sales Details</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link className="flex items-center rounded-lg p-2 text-[#CAD0E4]">
-                <GoSignOut className="h-6 w-6 text-[#CAD0E4] transition duration-75  " />
+              <NavLink
+                to="/signup"
+                className=" flex h-8 items-center p-2  font-bold text-[#A3Aed0]"
+              >
+                <GoSignOut className="h-6 w-6 text-[#A3Aed0] transition duration-75  " />
                 <span className="ml-3" onClick={logOut}>
                   Log out
                 </span>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>

@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { useData } from "../context/dataContext";
+import { useData } from "../hooks/useData";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import AddSalesDetails from "./Modals/AddSalesDetails";
 
 const SalesDetails = () => {
-  const { sales, delete_purchase } = useData();
+  const { filteredSales, delete_purchase } = useData();
   const [showModal, setShowModal] = useState(false);
-  console.log("sales", sales);
   return (
     <>
       <div className="  p-4 sm:ml-64">
@@ -37,7 +36,10 @@ const SalesDetails = () => {
                     id
                   </th>
                   <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
-                    Name
+                    Product Name
+                  </th>
+                  <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
+                    store Name
                   </th>
                   <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
                     Stock
@@ -46,15 +48,16 @@ const SalesDetails = () => {
                     Price
                   </th>
                   <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
-                    purchased Date
+                    Sales Date
                   </th>
                   <th scope="col" class="px-4 py-3 text-[#C5CCE1]">
                     Action
                   </th>
                 </tr>
               </thead>
-              {sales.map((value, index) => {
-                const { _id, productName, date, price, quantity } = value;
+              {filteredSales.map((value, index) => {
+                const { _id, productName, storeName, date, price, quantity } =
+                  value;
                 return (
                   <tbody key={_id}>
                     <tr class="bg-white   ">
@@ -64,6 +67,12 @@ const SalesDetails = () => {
                         class="whitespace-nowrap px-4 py-4 font-medium text-gray-900 "
                       >
                         {productName}
+                      </th>
+                      <th
+                        scope="row"
+                        class="whitespace-nowrap px-4 py-4 font-medium text-gray-900 "
+                      >
+                        {storeName}
                       </th>
 
                       <td class="px-4 py-4">{quantity}</td>
