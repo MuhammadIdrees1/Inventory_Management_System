@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const purgecss = require("@fullhuman/postcss-purgecss");
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
@@ -11,5 +12,10 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    purgecss({
+      content: ["./**/*.html"],
+    }),
+    ``,
+  ],
 };

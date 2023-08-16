@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useData } from "../../hooks/useData";
-import { addProduct } from "../../api/Products";
+import { updateProduct } from "../api/Products";
+import { useData } from "../hooks/useData";
+import { useLocation } from "react-router-dom";
 
-const AddProducts = (props) => {
-  const { userId } = useData();
-  console.log("addProduct", userId);
+const UpdateProducts = (props) => {
+  const { setProducts, products } = useData();
+  console.log(props.id);
   const [input, setInput] = useState({
     name: "",
     description: "",
     manufacturer: "",
   });
+  const location = useLocation();
+  const product = location.state?.products;
+  console.log(product, "update");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -23,7 +27,7 @@ const AddProducts = (props) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("pressed");
     const newProduct = {
@@ -31,12 +35,26 @@ const AddProducts = (props) => {
       description: input.description,
       manufacturer: input.manufacturer,
     };
+    const id = props.id;
 
-    console.log(userId, newProduct);
-    addProduct(userId, newProduct);
+    const { data } = await updateProduct(id, newProduct);
+
+    const newData = products?.map((item) => {
+      console.log(item._id, "prod", data?.product._id, "dat");
+
+      const { product } = data;
+      if (item._id === data?.product._id) {
+        return { ...item, ...product };
+      }
+      return item;
+    });
+
+    setProducts(newData);
+
+    console.log("upd", newData);
 
     setInput({ name: "", description: "", manufacturer: "" });
-    props.setShowModal(false);
+    props.setShowUpdateModal(false);
     // window.location.reload();
   };
   return (
@@ -51,9 +69,11 @@ const AddProducts = (props) => {
           <div class="relative rounded-lg bg-white shadow ">
             {/* Modal header  */}
             <div class="flex items-center justify-center rounded-t border-b p-5 ">
-              <h3 class="text-xl  font-medium text-gray-900 ">Add Products</h3>
+              <h3 class="text-xl  font-medium text-gray-900 ">
+                Update Products
+              </h3>
               <button
-                onClick={() => props.setShowModal(false)}
+                onClick={() => props.setShowUpdateModal(false)}
                 type="button"
                 class="ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 "
                 data-modal-hide="small-modal"
@@ -140,4 +160,4 @@ const AddProducts = (props) => {
   );
 };
 
-export default AddProducts;
+export default UpdateProducts;

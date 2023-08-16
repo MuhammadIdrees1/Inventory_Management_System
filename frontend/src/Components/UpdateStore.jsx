@@ -1,10 +1,14 @@
+import React from "react";
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useData } from "../../hooks/useData";
-import { add_Store } from "../../api/Stores";
+import { update_Store } from "../api/Stores";
+import { useData } from "../hooks/useData";
+import { showToastMessage } from "../utils/Toasts";
 
-const AddStore = (props) => {
-  const { userId } = useData();
+const UpdateStore = (props) => {
+  console.log(props);
+  const { setStores, stores } = useData();
+  console.log(props.id);
   const [input, setInput] = useState({
     store: "",
     address: "",
@@ -21,18 +25,40 @@ const AddStore = (props) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!input.store && !input.address) {
+      showToastMessage("error", "fill all input fields");
+      return;
+    }
     console.log("pressed");
     const newStore = {
       store: input.store,
       address: input.address,
     };
+    const id = props.id;
+    try {
+      const { data } = await update_Store(id, newStore);
 
-    add_Store(userId, newStore);
+      console.log(data);
+      const { store } = data;
+
+      const newData = stores.map((item) => {
+        if (item._id === data?.store?._id) {
+          return { ...item, ...store };
+        }
+        return item;
+      });
+
+      setStores(newData);
+
+      showToastMessage("success", data.message);
+    } catch (error) {
+      showToastMessage("error", error);
+    }
 
     setInput({ store: "", address: "" });
-    props.setShowModal(false);
+    props.setShowUpdateModal(false);
     // window.location.reload();
   };
   return (
@@ -47,9 +73,9 @@ const AddStore = (props) => {
           <div class="relative rounded-lg bg-white shadow ">
             {/* Modal header  */}
             <div class="flex items-center justify-center rounded-t border-b p-5 ">
-              <h3 class="text-xl  font-medium text-gray-900 ">Add Store</h3>
+              <h3 class="text-xl  font-medium text-gray-900 ">Update Store</h3>
               <button
-                onClick={() => props.setShowModal(false)}
+                onClick={() => props.setShowUpdateModal(false)}
                 type="button"
                 class="ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 "
                 data-modal-hide="small-modal"
@@ -116,4 +142,4 @@ const AddStore = (props) => {
   );
 };
 
-export default AddStore;
+export default UpdateStore;

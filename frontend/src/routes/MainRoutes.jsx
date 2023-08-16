@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import axios from "axios";
@@ -9,8 +9,8 @@ import Products from "../pages/Products";
 import Topbar from "../Components/Topbar";
 import Stores from "../pages/Stores";
 import NotFound from "../pages/NotFound";
-import PurchaseDetails from "../Components/PurchaseDetails";
-import SalesDetails from "../Components/SalesDetails";
+import PurchaseDetails from "../pages/PurchaseDetails";
+import SalesDetails from "../pages/SalesDetails";
 
 const MainRoutes = () => {
   const navigate = useNavigate();

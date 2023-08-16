@@ -131,7 +131,7 @@ const Sidebar = () => {
                   className="icon h-6 w-6 text-[#A3Aed0] transition duration-75
                  "
                 />
-                <span className="ml-3">Add Purchase Details</span>
+                <span className="ml-3">Purchase Details</span>
               </NavLink>
             </li>
             <li>
@@ -140,7 +140,7 @@ const Sidebar = () => {
                 className="flex h-8 items-center p-2  font-semibold text-[#A3Aed0]   "
               >
                 <FaStore className=" icon h-6 w-6 text-[#A3Aed0] transition duration-75 " />
-                <span className="ml-3">Add Sales Details</span>
+                <span className="ml-3">Sales Details</span>
               </NavLink>
             </li>
             <li>

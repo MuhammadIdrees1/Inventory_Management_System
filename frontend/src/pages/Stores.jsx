@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useData } from "../hooks/useData";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import AddStore from "../Components/Modals/AddStore";
-import UpdateStore from "../Components/Modals/UpdateStore";
+import AddStore from "../Components/AddStore";
+import UpdateStore from "../Components/UpdateStore";
 import Table from "../common/Table";
 import { delete_Store } from "../api/Stores";
+import { showToastMessage } from "../utils/Toasts";
 
 const Stores = () => {
-  const { filteredStores } = useData();
+  const { filteredStores, setStores, stores } = useData();
   const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [productId, setProductId] = useState("");
@@ -17,6 +18,22 @@ const Stores = () => {
   //   { heading: "Name", value: "store" },
   //   { heading: "Address", value: "address" },
   // ];
+
+  const handleDelete = async (_id) => {
+    try {
+      const { data } = await delete_Store(_id);
+      console.log(data);
+
+      const filteredData = stores.filter((item) => {
+        return item._id !== data?.deleteStore?._id;
+      });
+
+      setStores(filteredData);
+      showToastMessage("success", data.message);
+    } catch (error) {
+      showToastMessage("error", error);
+    }
+  };
 
   return (
     <>
@@ -82,9 +99,7 @@ const Stores = () => {
                           Update
                         </Link>
                         <Link
-                          onClick={() => {
-                            delete_Store(_id);
-                          }}
+                          onClick={() => handleDelete(_id)}
                           class="pl-3 font-medium  text-red-600 hover:underline"
                         >
                           Delete

@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useData } from "../hooks/useData";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import AddProducts from "../Components/Modals/AddProducts";
-import UpdateProducts from "../Components/Modals/UpdateProducts";
+import AddProducts from "../Components/AddProducts";
+import UpdateProducts from "../Components/UpdateProducts";
 import { deleteProduct } from "../api/Products";
+import { showToastMessage } from "../utils/Toasts";
 
 const Products = () => {
-  const { filteredProducts, userId } = useData();
+  const { filteredProducts, userId, setProducts, products } = useData();
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [productId, setProductId] = useState("");
@@ -20,6 +21,20 @@ const Products = () => {
   //   { heading: "Stock", value: "stock" },
   // ];
 
+  const handleDelete = async (_id) => {
+    try {
+      const { data } = await deleteProduct(_id);
+
+      const newData = products.filter((item) => {
+        return item._id !== data?.product._id;
+      });
+
+      setProducts(newData);
+      showToastMessage("success", data?.message);
+    } catch (error) {
+      showToastMessage("error", error);
+    }
+  };
   return (
     <>
       <div className="  p-4 sm:ml-64">
@@ -98,9 +113,7 @@ const Products = () => {
                           Update
                         </Link>
                         <Link
-                          onClick={() => {
-                            deleteProduct(_id);
-                          }}
+                          onClick={() => handleDelete(_id)}
                           class="pl-3 font-medium  text-red-600 hover:underline"
                         >
                           Delete

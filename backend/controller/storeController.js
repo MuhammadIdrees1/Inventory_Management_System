@@ -11,9 +11,9 @@ const add_Store = async (req, res) => {
       address: req.body.store,
     });
     const addStore = await stores.save();
-    res.send(addStore);
+    res.status(201).json({ message: "Store added successfully", addStore });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -24,7 +24,7 @@ const get_Store = async (req, res) => {
     const allStores = await Store.find({ userId });
     res.send(allStores);
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -39,9 +39,9 @@ const update_Store = async (req, res) => {
       },
       { new: true }
     );
-    res.json(store);
+    res.status(200).json({ message: "Store updated successfully", store });
   } catch (error) {
-    res.json({ message: error });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -49,9 +49,11 @@ const update_Store = async (req, res) => {
 const delete_Store = async (req, res) => {
   try {
     const deleteStore = await Store.findByIdAndDelete(req.params.id);
-    res.send(deleteStore);
+    res
+      .status(200)
+      .json({ message: "Store deleted successfully", deleteStore });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 

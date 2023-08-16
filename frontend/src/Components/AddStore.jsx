@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { updateProduct } from "../../api/Products";
+import { useData } from "../hooks/useData";
+import { add_Store } from "../api/Stores";
+import { showToastMessage } from "../utils/Toasts";
 
-const UpdateProducts = (props) => {
-  console.log(props.id);
+const AddStore = (props) => {
+  const { userId, setStores } = useData();
+  const buttonRef = useRef(null);
   const [input, setInput] = useState({
-    name: "",
-    description: "",
-    manufacturer: "",
+    store: "",
+    address: "",
   });
 
   const handleChange = (event) => {
@@ -21,20 +23,34 @@ const UpdateProducts = (props) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    buttonRef.current.disabled = true;
     e.preventDefault();
+    if (!input.store && !input.address) {
+      showToastMessage("error", "fill all input fields");
+      return;
+    }
     console.log("pressed");
-    const newProduct = {
-      name: input.name,
-      description: input.description,
-      manufacturer: input.manufacturer,
+    const newStore = {
+      store: input.store,
+      address: input.address,
     };
-    const id = props.id;
 
-    updateProduct(id, newProduct);
+    try {
+      const { data } = await add_Store(userId, newStore);
+      console.log(data.addStore, "a");
 
-    setInput({ name: "", description: "", manufacturer: "" });
-    props.setShowUpdateModal(false);
+      setStores((prev) => {
+        return [...prev, data.addStore];
+      });
+
+      setInput({ store: "", address: "" });
+      showToastMessage("success", data.message);
+    } catch (error) {
+      showToastMessage("error", error);
+    }
+
+    props.setShowModal(false);
     // window.location.reload();
   };
   return (
@@ -49,11 +65,9 @@ const UpdateProducts = (props) => {
           <div class="relative rounded-lg bg-white shadow ">
             {/* Modal header  */}
             <div class="flex items-center justify-center rounded-t border-b p-5 ">
-              <h3 class="text-xl  font-medium text-gray-900 ">
-                Update Products
-              </h3>
+              <h3 class="text-xl  font-medium text-gray-900 ">Add Store</h3>
               <button
-                onClick={() => props.setShowUpdateModal(false)}
+                onClick={() => props.setShowModal(false)}
                 type="button"
                 class="ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 "
                 data-modal-hide="small-modal"
@@ -67,67 +81,49 @@ const UpdateProducts = (props) => {
                 <div class="group relative z-0 mb-6 w-full">
                   <input
                     type="text"
-                    name="name"
+                    name="store"
                     id="floating_email"
                     class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
                     placeholder=" "
                     required
-                    value={input.name}
+                    value={input.store}
                     onChange={handleChange}
                   />
                   <label
                     for="floating_email"
                     class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500"
                   >
-                    Name
+                    Store Name
                   </label>
                 </div>
                 <div class="group relative z-0 mb-6 w-full">
                   <input
                     type="text"
-                    name="manufacturer"
+                    name="address"
                     id="floating_password"
                     class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm  text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
                     placeholder=" "
                     required
-                    value={input.manufacturer}
+                    value={input.address}
                     onChange={handleChange}
                   />
                   <label
                     for="floating_password"
                     class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500"
                   >
-                    Manufacturer
-                  </label>
-                </div>
-                <div class="group relative z-0 mb-6 w-full">
-                  <textarea
-                    value={input.description}
-                    onChange={handleChange}
-                    rows={5}
-                    maxLength={250}
-                    type="text"
-                    name="description"
-                    id="floating_repeat_password"
-                    class=" peer block w-full resize-none appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm  text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
-                    placeholder=" "
-                    required
-                  />
-                  <label
-                    for="floating_repeat_password"
-                    class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500"
-                  >
-                    Description
+                    address
                   </label>
                 </div>
               </div>
               {/* Modal footer */}
               <div class="flex items-center justify-center space-x-2 rounded-b border-t border-gray-200 p-6 ">
                 <button
+                  ref={buttonRef}
                   data-modal-hide="small-modal"
                   type="submit"
                   onClick={handleSubmit}
-                  class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 "
+                  disabled={!input.store || !input.address}
+                  class="w-full  rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:bg-slate-400 "
                 >
                   Submit
                 </button>
@@ -140,4 +136,4 @@ const UpdateProducts = (props) => {
   );
 };
 
-export default UpdateProducts;
+export default AddStore;

@@ -36,7 +36,7 @@ const add_Sales_Details = async (req, res) => {
 
     await product.save();
     res.status(201).json({
-      message: "Purchase details added successfully",
+      message: "Sales details added successfully",
       Sales_Details,
     });
   } catch (error) {
@@ -57,7 +57,22 @@ const all_Sales_details = async (req, res) => {
   }
 };
 
+// Delete sale
+const delete_Sales_Details = async (req, res) => {
+  console.log(req.params.id);
+  try {
+    const sale = await SalesDetails.findByIdAndDelete(req.params.id);
+    if (!sale) {
+      res.status(404).json({ message: "Sale not found" });
+    }
+    res.status(200).json({ message: "Sales deleted successfully", sale });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   add_Sales_Details,
   all_Sales_details,
+  delete_Sales_Details,
 };

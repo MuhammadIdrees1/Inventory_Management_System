@@ -2,12 +2,28 @@ import { useState } from "react";
 import { useData } from "../hooks/useData";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import AddPurchaseDetails from "./Modals/AddPurchaseDetails";
+import AddPurchaseDetails from "../Components/AddPurchaseDetails";
 import { delete_purchase } from "../api/Purchase";
+import { showToastMessage } from "../utils/Toasts";
 
 const PurchaseDetails = () => {
-  const { filteredPurchases } = useData();
+  const { filteredPurchases, setPurchase, purchase } = useData();
   const [showModal, setShowModal] = useState(false);
+
+  const handleDelete = async (_id) => {
+    try {
+      const { data } = await delete_purchase(_id);
+
+      const newData = purchase.filter((item) => {
+        return item._id !== data?.purchase._id;
+      });
+
+      setPurchase(newData);
+      showToastMessage("success", data?.message);
+    } catch (error) {
+      showToastMessage("error", error);
+    }
+  };
 
   return (
     <>
@@ -72,9 +88,7 @@ const PurchaseDetails = () => {
                       <td class="px-4 py-4">{date.slice(0, 10)}</td>
                       <td class="px-4 py-4">
                         <Link
-                          onClick={() => {
-                            delete_purchase(_id);
-                          }}
+                          onClick={() => handleDelete(_id)}
                           class="pl-3 font-medium  text-red-600 hover:underline"
                         >
                           Delete

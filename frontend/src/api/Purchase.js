@@ -9,22 +9,20 @@ export const get_purchase = async (userId) => {
 };
 
 // add Purchase Details on products
-export const add_Purchase_Details = (userId, id, newPurchaseDetails) => {
-  axios
+export const add_Purchase_Details = async (userId, id, newPurchaseDetails) => {
+  return await axios
     .post(
       `http://localhost:5050/api/purchase/${id}/${userId}`,
       newPurchaseDetails
     )
-    .then((res) => get_purchase(res))
+    .then((res) => res)
     .catch((error) => console.log(error));
-  window.location.reload();
 };
 
 // delete purchaseDetails
-export const delete_purchase = (_id) => {
-  axios
+export const delete_purchase = async (_id) => {
+  return await axios
     .delete(`http://localhost:5050/api/purchase/${_id}`)
-    .then((res) => get_purchase(res))
+    .then((res) => res)
     .catch((error) => console.log(error));
-  window.location.reload();
 };

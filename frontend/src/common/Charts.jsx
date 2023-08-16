@@ -1,93 +1,6 @@
-// import { useState } from "react";
-// import Chart from "react-apexcharts";
-// import { useData } from "../hooks/useData";
 import React from "react";
 import Chart from "react-apexcharts";
 
-// const Charts = () => {
-//   const { products } = useData();
-//   console.log([products[1].price]);
-//   // const [data, setData] = useState(products);
-//   const [options, setOptions] = useState({
-//     chart: {
-//       id: "apexchart-example",
-//     },
-//     xaxis: {
-//       categories: ["jan", "feb", 1993, 1994, 1995, 1996, 1997, 1998, 1999],
-//     },
-
-//     toolbar: {
-//       show: false,
-//       autoSelected: "pan",
-//     },
-//   });
-//   const [series, setSeries] = useState([
-//     {
-//       name: "sales",
-//       data: [products[1].price],
-//     },
-//     {
-//       name: "purchase",
-//       data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
-//     },
-//   ]);
-//   return (
-//     <Chart
-//       options={options}
-//       series={series}
-//       type="bar"
-//       width={500}
-//       height={300}
-//     />
-//   );
-// };
-
-// const Charts = () => {
-//   const chartData = [
-//     { x: "January", revenue: 1000, profit: 500, loss: 200 },
-//     { x: "February", revenue: 1500, profit: 600, loss: 300 },
-//     { x: "March", revenue: 2000, profit: 800, loss: 400 },
-//     { x: "April", revenue: 6000, profit: 800, loss: 400 },
-//     // and so on...
-//   ];
-
-//   const chartOptions = {
-//     chart: {
-//       type: "area",
-//       height: 350,
-//     },
-//     title: {
-//       text: "Sales, Purchases, Revenue, and Loss",
-//       align: "center",
-//     },
-//     xaxis: {
-//       categories: chartData.map((data) => data.x),
-//       title: {
-//         text: "Month",
-//       },
-//     },
-//     yaxis: {
-//       title: {
-//         text: "Amount ($)",
-//       },
-//     },
-//   };
-
-//   return (
-//     <Chart
-//       options={chartOptions}
-//       series={[
-//         { name: "Revenue", data: chartData.map((data) => data.revenue) },
-//         { name: "Purchases", data: chartData.map((data) => data.purchase) },
-//         { name: "Profit", data: chartData.map((data) => data.profit) },
-//         { name: "Loss", data: chartData.map((data) => data.loss) },
-//       ]}
-//       type="area"
-//       height={350}
-//       width={800}
-//     />
-//   );
-// };
 const Charts = () => {
   const data = [
     {
@@ -141,13 +54,13 @@ const Charts = () => {
       id: "basic-bar",
     },
     xaxis: {
-      categories: ["Price"],
+      categories: ["Price", "purchase"],
     },
   };
 
   const series = [
     {
-      name: "price",
+      name: "purchase",
       data: prices,
     },
   ];

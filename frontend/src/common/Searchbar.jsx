@@ -71,7 +71,7 @@ const Searchbar = () => {
 
   useEffect(() => {
     handleFilter();
-  }, [value]);
+  }, [value, products, purchase, stores, sales]);
 
   return (
     <label className="ml-2 flex h-5/6 w-3/4 items-center  justify-start   rounded-full bg-[#F4F7FE] focus:outline-0">

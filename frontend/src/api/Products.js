@@ -8,28 +8,25 @@ export const get_products = async (userId) => {
 };
 
 // add products
-export const addProduct = (userId, newProduct) => {
-  axios
+export const addProduct = async (userId, newProduct) => {
+  return await axios
     .post(`http://localhost:5050/api/products/${userId}`, newProduct)
-    .then((res) => get_products(res))
+    .then((res) => res)
     .catch((error) => console.log(error));
-  window.location.reload();
 };
 
 // delete product
-export const deleteProduct = (_id) => {
-  axios
+export const deleteProduct = async (_id) => {
+  return await axios
     .delete(`http://localhost:5050/api/products/${_id}`)
-    .then((res) => get_products(res))
+    .then((res) => res)
     .catch((error) => console.log(error));
-  window.location.reload();
 };
 
 // updateProduct
-export const updateProduct = (id, newProduct) => {
-  axios
+export const updateProduct = async (id, newProduct) => {
+  return await axios
     .put(`http://localhost:5050/api/products/${id}`, newProduct)
-    .then((res) => get_products(res))
+    .then((res) => res)
     .catch((error) => console.log(error));
-  window.location.reload();
 };

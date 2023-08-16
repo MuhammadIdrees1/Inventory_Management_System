@@ -62,7 +62,9 @@ const delete_purchase = async (req, res) => {
     if (!purchase) {
       res.status(404).json({ message: "Product not found" });
     }
-    res.status(200).json({ message: "Product deleted successfully", purchase });
+    res
+      .status(200)
+      .json({ message: "Purchase deleted successfully", purchase });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }

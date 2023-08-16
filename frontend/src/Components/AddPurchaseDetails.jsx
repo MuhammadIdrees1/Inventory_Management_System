@@ -1,28 +1,21 @@
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useData } from "../../hooks/useData";
-import { add_Sales_Details } from "../../api/Sales";
+import { useData } from "../hooks/useData";
+import { add_Purchase_Details } from "../api/Purchase";
+import { showToastMessage } from "../utils/Toasts";
 
-const AddSalesDetails = (props) => {
-  const { products, stores, userId } = useData();
+const AddPurchaseDetails = (props) => {
+  const { products, userId, setPurchase } = useData();
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedStore, setSelectedStore] = useState(null);
   const [input, setInput] = useState({
     product: "",
-    store: "",
     quantity: "",
     price: "",
     date: "",
   });
 
-  console.log("store", stores);
-
   const handleOptionChange = (e) => {
     setSelectedProduct(e.target.value);
-  };
-
-  const handleStoreOptionChange = (e) => {
-    setSelectedStore(e.target.value);
   };
 
   const handleChange = (event) => {
@@ -36,24 +29,42 @@ const AddSalesDetails = (props) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    if (!input.product && !input.quantity && !input.price && !input.date) {
+      showToastMessage("error", "fill all input fields");
+      return;
+    }
+
     e.preventDefault();
     console.log("pressed");
-    const newSalesDetails = {
+    const newPurchaseDetails = {
+      product: input.product,
       quantity: input.quantity,
       price: input.price,
       date: input.date,
     };
-    console.log("newSales", newSalesDetails);
-    const productId = selectedProduct;
-    const storeId = selectedStore;
+    const id = selectedProduct;
 
-    add_Sales_Details(userId, storeId, productId, newSalesDetails);
+    try {
+      const { data } = await add_Purchase_Details(
+        userId,
+        id,
+        newPurchaseDetails
+      );
+
+      setPurchase((prev) => {
+        return [...prev, data?.Purchase_Details];
+      });
+
+      showToastMessage("success", data.message);
+    } catch (error) {
+      showToastMessage("error", error);
+    }
 
     props.setShowModal(false);
   };
 
-  console.log(selectedProduct);
+  console.log(input);
 
   return (
     <>
@@ -68,7 +79,7 @@ const AddSalesDetails = (props) => {
             {/* Modal header  */}
             <div class="flex items-center justify-center rounded-t border-b p-5 ">
               <h3 class="text-xl  font-medium text-gray-900 ">
-                Add Sales Details
+                Add Purchase Details
               </h3>
               <button
                 onClick={() => props.setShowModal(false)}
@@ -91,35 +102,11 @@ const AddSalesDetails = (props) => {
                       required={true}
                       value={selectedProduct}
                     >
+                      <option value="">Select Product</option>
                       {products.map((value) => {
                         return (
                           <option key={value._id} value={value._id}>
                             {value.name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    <label
-                      class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500"
-                      htmlFor="countries"
-                      value="Select your country"
-                    ></label>
-                  </div>
-                </div>
-                <div class="group relative z-0 mb-6 w-full">
-                  <div id="select">
-                    <select
-                      class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
-                      id="countries"
-                      onChange={handleStoreOptionChange}
-                      placeholder="select store"
-                      required={true}
-                      value={selectedStore}
-                    >
-                      {stores.map((value) => {
-                        return (
-                          <option key={value._id} value={value._id}>
-                            {value.store}
                           </option>
                         );
                       })}
@@ -192,7 +179,8 @@ const AddSalesDetails = (props) => {
                   data-modal-hide="small-modal"
                   type="submit"
                   onClick={handleSubmit}
-                  class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 "
+                  disabled={!input.quantity || !input.price || !input.date}
+                  class=" w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:bg-slate-400 "
                 >
                   Submit
                 </button>
@@ -205,4 +193,4 @@ const AddSalesDetails = (props) => {
   );
 };
 
-export default AddSalesDetails;
+export default AddPurchaseDetails;
