@@ -19,7 +19,7 @@ const ContextApi = ({ children }) => {
   const [filteredSales, setFilteredSales] = useState([]);
   const [filteredPurchases, setFilteredPurchases] = useState([]);
   const [filteredStores, setFilteredStores] = useState([]);
-
+  console.log(userId);
   useEffect(() => {
     get_products(userId)
       .then((res) => {

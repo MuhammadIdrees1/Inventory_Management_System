@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const get_sales = async (userId) => {
-  const { data } = await axios.get(`http://localhost:5050/api/sales/${userId}`);
+  const { data } = await axios.get(`/api/sales/${userId}`);
   return data;
 };
 
@@ -11,11 +11,9 @@ export const add_Sales_Details = async (
   productId,
   newSalesDetails
 ) => {
+  console.log(userId, storeId, productId, newSalesDetails);
   return await axios
-    .post(
-      `http://localhost:5050/api/sales/${userId}/${storeId}/${productId}`,
-      newSalesDetails
-    )
+    .post(`/api/sales/${userId}/${storeId}/${productId}`, newSalesDetails)
     .then((res) => res)
     .catch((error) => console.log(error));
 };
@@ -23,7 +21,7 @@ export const add_Sales_Details = async (
 // delete sales
 export const delete_Sales_Details = async (_id) => {
   return await axios
-    .delete(`http://localhost:5050/api/sales/${_id}`)
+    .delete(`/api/sales/${_id}`)
     .then((res) => res)
     .catch((error) => console.log(error));
 };
