@@ -45,7 +45,7 @@ const Signup = () => {
             //  else if (password) generateError(password);
           } else {
             setValues({ username: "", email: "", password: "" });
-            navigate("/");
+            navigate("/login");
           }
         }
       } catch (error) {

@@ -1,73 +1,61 @@
 import React from "react";
 import Chart from "react-apexcharts";
-
+import { useData } from "../hooks/useData";
 const Charts = () => {
-  const data = [
-    {
-      _id: "644ba3a725987871138deea8",
-      product: "644ba34e25987871138dee86",
-      userId: "644ba31b25987871138dee71",
-      productName: "vbvb",
-      store: "644ba35f25987871138dee8d",
-      storeName: "nbnhb",
-      date: "2023-04-28T00:00:00.000Z",
-      price: 3000,
-      quantity: 400,
-      createdAt: "2023-04-28T10:44:55.096Z",
-      updatedAt: "2023-04-28T10:44:55.096Z",
-      __v: 0,
-    },
-    {
-      _id: "644ba44325987871138deec0",
-      product: "644ba34e25987871138dee86",
-      userId: "644ba31b25987871138dee71",
-      productName: "vbvb",
-      store: "644ba35f25987871138dee8d",
-      storeName: "nbnhb",
-      date: "2023-04-28T00:00:00.000Z",
-      price: 5000,
-      quantity: 50,
-      createdAt: "2023-04-28T10:47:31.558Z",
-      updatedAt: "2023-04-28T10:47:31.558Z",
-      __v: 0,
-    },
-    {
-      _id: "644bc746ced6073f0ddda26e",
-      product: "644baf1b25987871138defae",
-      userId: "644ba31b25987871138dee71",
-      productName: "bcbc",
-      store: "644bc711ced6073f0ddda262",
-      storeName: "ete",
-      date: "2023-04-28T00:00:00.000Z",
-      price: 400,
-      quantity: 500,
-      createdAt: "2023-04-28T13:16:54.271Z",
-      updatedAt: "2023-04-28T13:16:54.271Z",
-      __v: 0,
-    },
-  ];
+  const { sales, products } = useData();
 
-  const prices = data.map((item) => item.price);
+  const salesData = sales.map((item) => item.price);
 
-  const options = {
-    chart: {
-      id: "basic-bar",
-    },
-    xaxis: {
-      categories: ["Price", "purchase"],
-    },
-  };
+  const purchaseData = products.map((item) => item.price);
+
+  // Sample data for sales and purchase
+  // const salesData = [30, 40, 35, 50, 49, 60, 70, 91, 125];
+  // const purchaseData = [25, 35, 30, 45, 40, 55, 65, 80, 110];
 
   const series = [
     {
-      name: "purchase",
-      data: prices,
+      name: "Sales",
+      data: salesData,
+    },
+    {
+      name: "Purchase",
+      data: purchaseData,
     },
   ];
 
+  const options = {
+    chart: {
+      height: 350,
+      type: "line",
+    },
+    xaxis: {
+      categories: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+      ],
+    },
+    colors: ["#008FFB", "#00E396"], // Customizing colors for series
+    legend: {
+      position: "top",
+    },
+  };
+
   return (
     <div>
-      <Chart options={options} series={series} type="bar" width={500} />
+      <Chart
+        options={options}
+        series={series}
+        type="bar"
+        height={350}
+        width={700}
+      />
     </div>
   );
 };

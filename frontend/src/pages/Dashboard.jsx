@@ -5,7 +5,7 @@ import Cards from "../common/Cards";
 const Dashboard = () => {
   const { products, stores, sales, purchase } = useData();
 
-  // total sales
+  // total purchase
   const totalPurchasePrice = purchase.reduce(
     (acc, curr) => acc + curr.price,
     0

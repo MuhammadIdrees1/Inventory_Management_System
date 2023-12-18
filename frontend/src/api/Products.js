@@ -1,16 +1,16 @@
 import axios from "axios";
 
-export const get_products = async (userId) => {
-  const { data } = await axios.get(`/api/products/${userId}`);
-  return data;
-};
-
 // add products
 export const addProduct = async (userId, newProduct) => {
   return await axios
     .post(`/api/products/${userId}`, newProduct)
     .then((res) => res)
     .catch((error) => console.log(error));
+};
+
+export const get_products = async (userId) => {
+  const { data } = await axios.get(`/api/products/${userId}`);
+  return data;
 };
 
 // delete product

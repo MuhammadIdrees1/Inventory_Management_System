@@ -53,7 +53,6 @@ const MainRoutes = () => {
               element={<PurchaseDetails />}
             />
             <Route path="/salesDetails" exact element={<SalesDetails />} />
-
             <Route path="/stores" exact element={<Stores />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

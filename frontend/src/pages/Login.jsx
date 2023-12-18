@@ -43,7 +43,7 @@ const Login = () => {
       } catch (error) {
         console.log(error);
       }
-      window.location.reload();
+      // window.location.reload();
     }
     // e.preventDefault();
     // try {
