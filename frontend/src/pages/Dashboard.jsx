@@ -21,18 +21,19 @@ const Dashboard = () => {
   const Revenue = totalSalePrice - totalPurchasePrice;
 
   return (
-    <div className="p-4 sm:ml-64">
-      <div className="ml-7 mt-20  p-4  ">
-        <div className=" 3xl:grid-cols-6 mt-3 mb-6  grid h-52 w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3">
+    <div className=" p-4 sm:ml-64">
+      <div className="mt-20 p-4   md:ml-7">
+        <div className="3xl:grid-cols-6   mt-3 mb-6  grid h-52 w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3">
           <Cards name={"Products"} value={products.length} />
           <Cards name={"Stores"} value={stores.length} />
           <Cards name={"Out of Stock"} value={filteredProduct.length} />
           <Cards name={"Purchase"} value={totalPurchasePrice} />
           <Cards name={"Sales"} value={totalSalePrice} />
           <Cards name={Revenue < 0 ? "Loss" : "Revenue"} value={Revenue} />
-        </div>
-        <div className=" flex h-96 w-full items-center justify-center rounded-2xl bg-white ">
-          <Charts />
+
+          <div className=" col-span-full flex  items-center justify-center rounded-2xl bg-white py-4 ">
+            <Charts />
+          </div>
         </div>
       </div>
     </div>

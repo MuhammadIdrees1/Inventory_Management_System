@@ -15,11 +15,11 @@ const Topbar = () => {
   };
 
   return (
-    <nav className="fixed top-5 left-72 z-40 ml-6  h-24 w-3/4 rounded-xl   bg-opacity-50 bg-clip-padding backdrop-blur-lg backdrop-filter ">
-      <div className="px-3 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center justify-start">
-            <button
+    <nav className="fixed top-5 z-40 mx-4 h-44 w-11/12 rounded-xl border-2 bg-opacity-50  bg-clip-padding px-2 backdrop-blur-lg   backdrop-filter md:left-72 md:ml-6 md:h-24 md:w-3/4">
+      <div className=" py-4 md:px-3">
+        <div className=" items-center justify-between md:flex">
+          <div className="flex w-fit items-center justify-start">
+            {/* <button
               // onClick={() => setIsOpen(true)}
               data-drawer-target="logo-sidebar"
               data-drawer-toggle="logo-sidebar"
@@ -41,7 +41,7 @@ const Topbar = () => {
                   d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
                 ></path>
               </svg>
-            </button>
+            </button> */}
 
             <div>
               <p className="font-semiBold self-center whitespace-nowrap  text-sm capitalize tracking-wider  ">
@@ -54,13 +54,13 @@ const Topbar = () => {
           </div>{" "}
           {location.pathname === "/" ? null : (
             <div className="mb-2 flex items-center ">
-              <div className="ml-3 flex items-center ">
-                <div className="flex h-16 w-96 items-center rounded-full bg-white shadow-md">
+              <div className="flex items-center ">
+                <div className="flex h-16 w-auto items-center rounded-full bg-white shadow-md md:w-96">
                   {/* <input
-                  type="text"
-                  className="ml-2 h-5/6 w-3/4 rounded-full bg-[#F4F7FE] p-5"
-                  placeholder="Search"
-                /> */}
+                    type="text"
+                    className="ml-2 h-5/6 w-3/4 rounded-full bg-[#F4F7FE] p-5"
+                    placeholder="Search"
+                  /> */}
 
                   <Searchbar />
                   <button

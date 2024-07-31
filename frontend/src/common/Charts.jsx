@@ -48,7 +48,7 @@ const Charts = () => {
   };
 
   return (
-    <div>
+    <div className="overflow-auto">
       <Chart
         options={options}
         series={series}

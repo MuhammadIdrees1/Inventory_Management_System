@@ -106,6 +106,7 @@ const Signup = () => {
                   className="block h-10 w-64  bg-[#E6EFEE] p-1 focus:outline-none"
                   value={values.username}
                   // onChange={handleChange}
+                  autoComplete="off"
                   onChange={(event) =>
                     setValues({ ...values, username: event.target.value })
                   }
@@ -121,6 +122,7 @@ const Signup = () => {
                   required
                   placeholder="Email"
                   value={values.email}
+                  autoComplete="off"
                   onChange={(event) =>
                     setValues({ ...values, email: event.target.value })
                   }
@@ -137,6 +139,7 @@ const Signup = () => {
                   required
                   name="password"
                   placeholder="Password"
+                  autoComplete="off"
                   value={values.password}
                   onChange={(event) =>
                     setValues({ ...values, password: event.target.value })

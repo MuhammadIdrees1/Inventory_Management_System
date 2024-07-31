@@ -43,22 +43,21 @@ const Login = () => {
       } catch (error) {
         console.log(error);
       }
-      // window.location.reload();
+      window.location.reload();
     }
-    // e.preventDefault();
-    // try {
-    //   const uri = "http://localhost:5050/api/auth";
-    //   const { data: res } = await axios.post(uri, data);
-    //   localStorage.setItem("token", res.data);
-    //   window.location = "/";
-    //   console.log(res.message);
-    // } catch (error) {
-    //   if (error.response.status >= 400 && error.response.status <= 500) {
-    //     setError(error.response.data.message);
-    //   }
-    // }
   };
-
+  //  e.preventDefault();
+  //     try {
+  //       const uri = "http://localhost:5050/api/auth";
+  //       const { data: res } = await axios.post(uri, data);
+  //       localStorage.setItem("token", res.data);
+  //       window.location = "/";
+  //       console.log(res.message);
+  //     } catch (error) {
+  //       if (error.response.status >= 400 && error.response.status <= 500) {
+  //         setError(error.response.data.message);
+  //       }
+  //     }
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-[#FFFFFF] ">
       <div className="m-2 flex  h-3/4 w-2/3 bg-white shadow-lg">
@@ -79,6 +78,7 @@ const Login = () => {
                   onChange={handleChange}
                   placeholder="Email"
                   className="block  h-10 w-64 bg-[#E6EFEE] p-1 focus:outline-none"
+                  autoComplete="off" 
                 />
               </div>
               <div className="mb-5 flex items-center  bg-[#E6EFEE]">
@@ -91,6 +91,7 @@ const Login = () => {
                   onChange={handleChange}
                   value={valuesForLogin.password}
                   placeholder="Password"
+                  autoComplete="off" 
                   className="block  h-10 w-72 bg-[#E6EFEE] p-1 focus:outline-none"
                 />
               </div>

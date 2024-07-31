@@ -38,8 +38,8 @@ const Products = () => {
   return (
     <>
       <div className="  p-4 sm:ml-64">
-        <div className="mt-14 ml-7   p-4  ">
-          <div class="relative mt-10 w-full overflow-x-auto border-0 bg-white  px-4 sm:rounded-2xl">
+        <div className="mt-36 p-4 md:mt-14  md:ml-7  ">
+          <div class="relative mt-10 w-full overflow-x-auto rounded-2xl border-0  bg-white px-4">
             <div class="mt-5 flex items-center justify-between pb-4">
               <div>
                 <h2 className="text-xl font-semibold  text-[#1B254B]">
@@ -49,7 +49,7 @@ const Products = () => {
               <div>
                 <button
                   onClick={() => setShowModal(true)}
-                  class=" b inline-flex items-center rounded-lg bg-[#EDF2F7]  px-3 py-3 text-gray-500  hover:bg-gray-100 focus:outline-none"
+                  class="  inline-flex items-center rounded-lg bg-[#EDF2F7]  px-3 py-3 text-gray-500  hover:bg-gray-100 focus:outline-none"
                   type="button"
                 >
                   <HiOutlinePlus class="h-5 w-5   text-[#422AFB] " />
